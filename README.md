@@ -44,4 +44,4 @@ The principles of programming languages are particularly valuable in mathematica
 
 >Content of the subfolders:
 
-Each folder contains a wide range of exercises focusing on the main theoretical concepts which may help in exemplyfying the usage of the syntax and various constructs.
+Each folder contains some exercises focusing on the main theoretical concepts which may help in exemplyfying the usage of the syntax and various constructs.
