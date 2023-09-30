@@ -170,6 +170,7 @@ These definitions typically appear at the top level of your program or within a 
 
 
 >begin:
+
 In Scheme, the begin construct is a special form used for grouping multiple expressions together into a single body of code.
 It allows you to execute a sequence of expressions sequentially, and it returns the result of the last expression in the sequence. Here's an explanation of how begin works:
 
@@ -265,6 +266,6 @@ In this example, map applies the lambda function to each element in the list, ef
 
 
 
->structs:
+
 
 
