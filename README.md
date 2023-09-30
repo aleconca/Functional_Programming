@@ -40,3 +40,8 @@ The principles of programming languages are particularly valuable in mathematica
 -Erlang: Erlang's concurrency and fault-tolerance features make it ideal for distributed and real-time systems, crucial in scientific simulations and telecommunications.
 
 -Haskell: Haskell's strong type system and functional programming paradigm make it suitable for mathematical modeling, algorithm development, and data analysis.
+
+
+>Content of the subfolders:
+
+Each folder contains a wide range of exercises focusing on the main theoretical concepts which may help in exemplyfying the usage of the syntax and various constructs.
