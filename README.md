@@ -1,4 +1,4 @@
-**Principles of Programming Languages in Mathematical and Scientific Computing**
+**Principles of Programming Languages**
 
 
 This repository explores the fundamental principles of programming languages and their application in the domains of mathematics and science using three functional programming languages: Scheme, Erlang, and Haskell.
