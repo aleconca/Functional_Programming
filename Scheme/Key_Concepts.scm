@@ -46,6 +46,8 @@ In this example, the if form evaluates the condition (> x 0) and returns one of 
 
 
 
+
+
 >procedures and lambda-calculus:
 
 1. Procedures:
@@ -104,6 +106,10 @@ functions as results. This is a powerful feature of Scheme and functional progra
 
 N.B. In Scheme, however, there is no strict distinction between procedures and functions. 
 In Scheme, you can use the define keyword to create both procedures and functions, and they are essentially the same concept.
+
+
+
+
 
 
 
@@ -169,6 +175,9 @@ These definitions typically appear at the top level of your program or within a 
 
 
 
+
+
+
 >begin:
 
 In Scheme, the begin construct is a special form used for grouping multiple expressions together into a single body of code.
@@ -210,6 +219,8 @@ In this case, the display expressions print text to the console sequentially, an
 (set! x 42)
 
 Exists also for vectors.
+
+
 
 
 
@@ -269,3 +280,196 @@ In this example, map applies the lambda function to each element in the list, ef
 
 
 
+>Closures:
+
+Imagine you have a magic book, and this book has a unique power. It can remember things from the past, even after those things are gone. Here's how it works:
+
+1. Magic Book Creation:
+You can create a magic book using a special recipe (a function). Each magic book is unique and remembers specific things.
+
+2. Remembering:
+When you create a magic book, you can put something special in it, like a number or a message.
+The magic book remembers what you put in it, even if you close it and put it on the shelf.
+
+3. Opening and Using:
+Later, when you open the magic book, you can read and use what it remembers.
+It's like the book has a superpower: it can reach back in time and tell you what you put in it, even though it was closed.
+
+(define (make-counter) ; closure: closes over anything that lays inside it
+  (let ((count 0))  ; Initialize a count variable inside the closure
+    (lambda ()      ; Create and return a function inside the closure
+      (set! count (+ count 1)) ; Update and remember the count variable
+      count)))       ; Return the current count
+      
+      
+(define my-counter (make-counter))
+
+(display (my-counter)) ; 1
+(display (my-counter)) ; 2
+(display (my-counter)) ; 3
+
+;N.B. The let expression is used to initialize the count variable to 0 when the closure is created. 
+;This initialization happens only once, when you first call (make-counter). After that, the count variable is part of the closure's environment, 
+;and its value persists and is updated across multiple calls to the closure.
+
+;other version: still yields the same result
+(define (make-counter)
+  (let ((count 0))
+    (define (counter-function)
+      (set! count (+ count 1))
+      count)
+    counter-function))
+
+(define counter (make-counter))
+
+(display (counter)) ; Display the result of calling the counter function  
+ (display (counter)) 
+(display (counter))
+
+
+;pay attention that this would be what you woud do WITHOUT a closure->pretty useless
+(define (add-one-to-count count)
+  (+ count 1))    
+      
+(display add-one-to-count 5) 
+;would always need an input which is not automatically updated
+
+
+
+
+
+
+>Foldl and Foldr:
+
+1. foldr: 
+   you give as input: 
+    -binary function
+    -where to store the result i.e. a destination
+    -the stuff to shich you should apply the binary function
+ Given (e1, e2, e3, ...) the foldr is applied firstly to (given_e1*apply_binary*store) then (given_e2*apply_binary*store(e1*binary*store)) etc.
+
+ (foldr string-append "" lst)
+
+2. foldl: 
+   you give as input: 
+    -binary function
+    -where to store the result i.e. a destination
+    -the stuff to shich you should apply the binary function
+ Given (e1, e2, e3, ...) the foldl is applied firstly to (given_en*apply_binary*store) then (given_en-1*apply_binary*store(en*binary*store)) etc.
+
+ (foldl + 0 lst)
+
+
+
+
+
+
+>Macros:
+
+N.B. (let ((x 1)) ...) is the same ((lambda(x) ... ) 1)
+
+A macro is a way to define custom transformations on code at compile time. It allows you to create new syntactic forms or modify existing ones.
+Macros are defined using the define-syntax or define-syntax-rule constructs.
+When you use a macro in your code, the macro gets expanded into regular Scheme code before the code is evaluated. This expansion is done at compile time.
+Macros are typically used to reduce code duplication, enhance readability, and create domain-specific languages within Scheme.
+Here's a simple example of a macro that defines a custom when construct:
+
+
+(define-syntax my-when
+  (syntax-rules ()
+    ((_ condition body ...) ;pattern matching, _ stands for the my-when keyword
+     (if condition (begin body ...)))))
+
+With this macro, you can use my-when in your code like this:
+
+(my-when (= x 10)
+  (display "x is 10")
+  (newline))
+
+
+Recursive macros are macros that can refer to themselves, allowing for repetitive code generation or transformation.
+They are defined similarly to regular macros but can use themselves within their expansion.
+Recursive macros are a more advanced feature and should be used carefully to avoid infinite recursion.
+Here's a simplified example of a recursive macro that generates a repetitive sequence of expressions:
+
+
+(define-syntax recursive-sequence
+  (syntax-rules ()
+    ((_ 0)
+     '())
+    ((_ n expr ...)
+     (cons expr (recursive-sequence (- n 1) expr ...)))))
+
+(define my-list (recursive-sequence 5 'x))
+
+In this example, recursive-sequence generates a list containing n repetitions of the given expressions. When you evaluate (recursive-sequence 5 'x), 
+it expands into (list 'x 'x 'x 'x 'x) using recursion.
+
+N.B. the ellipsis (...) is a notation used to indicate that there can be zero or more instances of the preceding element. 
+In the context of macros or syntax-rules in Scheme, the ellipsis is often used to indicate that there can be zero or more expressions or syntax patterns.
+
+
+
+
+
+
+
+
+>Continuations:
+
+Here are some key points to understand about continuations in Scheme:
+
+1. Representation of Control Flow:
+A continuation represents the control flow of a program at a specific point in its execution.
+It includes information about the program's call stack, including the sequence of function calls that led to the current point.
+
+2. Creating Continuations:
+In Scheme, you can capture the current continuation using the call-with-current-continuation procedure, often abbreviated as call/cc.
+When you call call/cc with a function as an argument, it captures the current continuation and passes it to the function.
+
+3. Passing and Invoking Continuations:
+Continuations can be passed around as first-class values, just like functions or data.
+You can invoke a captured continuation using the call/cc procedure, effectively jumping back to the point in the program represented by that continuation.
+
+4. Use Cases:
+Continuations are powerful for implementing complex control flow mechanisms, such as non-local exits, exception handling, and backtracking algorithms.
+They can be used to implement custom control structures, coroutines, generators, and cooperative multitasking.
+
+
+
+A. Closures:
+
+-Purpose:
+Closures are primarily used to capture the lexical environment (the set of variables and their values) in which a function is defined.
+They allow functions to "remember" variables from their surrounding scope even after that scope has exited.
+
+-Data Captured:
+Closures capture variables (data) and their values.
+They can be used for data encapsulation, encapsulating state within functions, and creating function factories.
+
+-Usage:
+Closures are widely used for maintaining state, creating private variables, and implementing data abstraction.
+
+
+B. Continuations
+
+-Purpose:
+Continuations are used to capture and represent the control flow and program execution state at a specific point in the program.
+They allow you to save and later resume the program's execution from that point.
+
+-Data Captured:
+Continuations capture control flow and execution context, including the call stack and program counter.
+They do not directly capture data or variables but rather the program's control structure.
+
+-Usage:
+Continuations are used for implementing complex control flow mechanisms, such as non-local exits, exception handling, backtracking, and custom control structures.
+They are less commonly used and often reserved for specific advanced programming tasks.
+
+
+
+
+
+
+
+
+>
