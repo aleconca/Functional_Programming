@@ -104,7 +104,8 @@
 ;Recursion: this recursive approach doesn't work for defining functions.
 
 ;Parameter Lists: The use of (f . rest1) and (x ...) (b . rest2) as parameters is not a standard way to define a procedure, and it's likely to cause syntax errors.
-
+;Cons cells are not typically used to define input arguments in Scheme procedures. Input arguments in Scheme (and most programming languages) are usually specified 
+;using standard parameter lists.
 
 
 
