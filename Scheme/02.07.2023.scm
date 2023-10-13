@@ -28,6 +28,6 @@
       (lambda (var) (let** def: val rest istr ...) val) ; to know whic was the last defined we change the default value
 
      (_ def: v ((var) . rest) istr... )
-      (lambda (var) (let** def: v rest istr ...) v)   
+      (lambda (var) (let** def: v rest istr ...) v)  ;pass the def: value to obtain a match in the recursive call, as above 
 
     ) )
