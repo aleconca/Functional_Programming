@@ -20,6 +20,10 @@
 
 (define-syntax multifun
   (syntax-rules () ;no additional syntax to pass to the constrct
+
+    ;remember that recursion needs a base case
+    ((_ (f) (x ...) (b))
+      (define (f (x ...)) b))
   
     ;we need to match a list of fs, list of params and bodies
     ;so we use (f . rest1) which is a way to define a list with a cons 
@@ -41,7 +45,7 @@
               b)  
       
       ;since we have more than one f we make the macro recursive->tail-recursive call
-      (multifun rest1 (x ...) rest3 ...)
+      (multifun rest1 (x ...) rest3)
       
       )
       
@@ -69,6 +73,44 @@
 ;Would be possible to define something similar, but using a procedure and lambda functions instead of a
 ;macro? If yes, do it; if no, explain why.
 
-;SOL:
+;SOL
+
+;Of course we can use a list of lambda functions instead of the list of bodies (alas, we need to replicate the list of
+;parameters on each body). The main problem is that we cannot bind the top-level function names from inside a procedure, so the
+;answer is no.
 
 
+
+;MINE:
+
+(define (multifun (f . rest1) (x ...) (b . rest2))
+  
+  (begin
+
+   ;define the anonymous procedure using a lambda function
+   (define f (lambda(x ...) (b)))
+   
+   ;make it tail recursive
+   (multifun rest1 (x ...) rest3) 
+  
+  )
+  )
+
+
+;WRONG!! why?
+
+;Rebinding of f: trying to redefine f within the lambda, which is not allowed.
+
+;Recursion: this recursive approach doesn't work for defining functions.
+
+;Parameter Lists: The use of (f . rest1) and (x ...) (b . rest2) as parameters is not a standard way to define a procedure, and it's likely to cause syntax errors.
+
+
+
+
+
+
+
+
+
+              
