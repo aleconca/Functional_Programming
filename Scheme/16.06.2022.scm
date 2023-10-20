@@ -4,11 +4,21 @@
 ;returns their composition.
 ;E.g. (list-to-compose (list f g h)) is the function f(g(h(x)).
 
+;define function
+(define (list-to-compose f . rest)
+  
+  (if (null? rest)
+      ; If there are no more functions in the list, return a lambda function
+      (lambda (x) (f x))
+      
+      ; Else, recursively compose the functions
+      (list-to-compose (compose f (car rest)) (cdr rest)))
+  
+  )
 
 
-(define (list-to-compose L);define the function 
-  ;cons node (a . b) but b is still a cons node (a . (c . d)) then (a . (c . (e . f))), if stop f = Null
-  ;we need a lambda to pass the argument x
-  (let (a car(L))
-    (lambda(x)(apply a x)))
-  (list-to-compose (cdr L)))
+  ;Another solution:
+  (define (list-to-compose lst)
+   (lambda (x)
+           (foldr (lambda (y acc) (y acc)) x lst)))
+
