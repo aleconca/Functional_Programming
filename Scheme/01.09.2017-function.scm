@@ -24,11 +24,15 @@
 
 ;remember previous balance in w
 (set! w z)
+
+;DOUBT: 
+;Is this cond defined correctly in Scheme? I mean, can I define it to check different conditions over different variables?
+;Also, could have I defined nultiple actions in the second argument?
   
 ;parametrized cases:
 ;cond works by searching through its arguments in order. It finds the first argument whose first element returns #t when evaluated, 
 ;and then evaluates and returns the second element of that argument. It does not go on to evaluate the rest of its arguments.
-Make sure that the last argument to every cond statement will always accept anything. This is important for avoiding infinite loops.
+;Make sure that the last argument to every cond statement will always accept anything. This is important for avoiding infinite loops.
   (cond         ((null? L) ;end
                   ((if (= z 0);all matched parenthesis 
                         res 
