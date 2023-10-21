@@ -24,7 +24,11 @@
 
 ;remember previous balance in w
 (set! w z)
-;parametrized cases           
+  
+;parametrized cases:
+;cond works by searching through its arguments in order. It finds the first argument whose first element returns #t when evaluated, 
+;and then evaluates and returns the second element of that argument. It does not go on to evaluate the rest of its arguments.
+Make sure that the last argument to every cond statement will always accept anything. This is important for avoiding infinite loops.
   (cond         ((null? L) ;end
                   ((if (= z 0);all matched parenthesis 
                         res 
