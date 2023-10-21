@@ -22,36 +22,36 @@
   
 (define (count-xy x y z w res L)
 
+
+;wrong structure ex. ba   
+((if (< z 0) 
+      #f));end with error
+  
+(if (null? L) ;end of list
+    ((if (= z 0);all matched parenthesis 
+          res ;end fine
+          #f));end with errors
+)
+
 ;remember previous balance in w
 (set! w z)
-
-;DOUBT: 
-;Is this cond defined correctly in Scheme? I mean, can I define it to check different conditions over different variables?
-;Also, could have I defined nultiple actions in the second argument?
   
 ;parametrized cases:
 ;cond works by searching through its arguments in order. It finds the first argument whose first element returns #t when evaluated, 
 ;and then evaluates and returns the second element of that argument. It does not go on to evaluate the rest of its arguments.
 ;Make sure that the last argument to every cond statement will always accept anything. This is important for avoiding infinite loops.
-  (cond         ((null? L) ;end
-                  ((if (= z 0);all matched parenthesis 
-                        res 
-                        #f))
-                 
-                 ( (< z 0)  #f );ba return false
+  (cond         
                  
                  ;check structure: ab aabbb bbaa
                  ( (eq? (car L) x)  (set! z (+ z 1)) ) ;check a and 1
                  
                  ( (eq? (car L) y)  (set! z (- z 1))) ;check b and 2
 
-                 
+                 (else (set! (= z z)));default
 
-                 (else ((+ 0 0)));default
-
-                 ))
-  ;if balance from this iteration has decreased then we matched an ab 
-  (if (< z w) 
+                 )
+  ;if balance from this iteration has decreased then we have matched an ab in the cond
+  (if (and (< z w) (> z 0));z must be positive otherwise a string starting with b would +1 result
       (count-xy x y z w (+ res 1) (cdr L))
       (count-xy x y z w res (cdr L))
   )
