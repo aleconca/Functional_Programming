@@ -12,7 +12,56 @@
 ;(check-this '(6 h a b a 1 h h i b z 2)) is #f (wrong structure)
 
 
+;THIS CODE DOESN'T WORK: should find a way to do it without cdr and car since we end up passing void lists to such structure which yields an error
 
+; Define a tail-recursive helper function
+ (define (count-xy x y z w res L)(
+    ; Remember the previous balance in w
+    (set! w z)
+    
+    (cond
+      ((empty? L) ; End of the list
+       (if (= z 0) ; All matched parenthesis
+           res
+           #f))
+      ((< z 0) #f) ; Unmatched parenthesis, return false
+      ((eq? (car L) x) ; Check for open symbols (a and 1)
+       (set! z (+ z 1)))
+      ((eq? (car L) y) ; Check for close symbols (b and 2)
+       (set! z (- z 1)))
+       ; Default case
+    )
+    
+    ; If balance from this iteration has decreased, then we matched a pair
+    ((if (< z w) 
+        (count-xy x y z w (+ res 1) (cdr L))
+        (count-xy x y z w res (cdr L)))
+        
+    
+  )
+ )
+)
+
+
+
+ 
+(define (check-this L iter )
+(
+  
+  ;Initialize counts for 'a' and 'b' as well as '1' and '2'
+  (let ((ab (count-xy 'a 'b 0 0 0 L))
+        (onetwo (count-xy 1 2 0 0 0 L)))
+  ; Return the sum of both counts
+  (+ ab onetwo)
+   )
+
+)
+)
+
+(display (check-this '(a b a b) )) ; Output: 2 OK
+(display (check-this '(h e l l o) )) ; Output: 0 OK
+(display (check-this '(6 h a b a 1 h h i 2 b z 1))) ; Output: 3 KO
+(display (check-this '(6 h a b a 1 h h i b z 2) )) ; Output: #f (wrong structure) KO
              
   
   
