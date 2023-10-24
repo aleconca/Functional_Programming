@@ -44,3 +44,7 @@
  (loc-p lst '() #f #f))
 
 (p '(* 1 2 3 * $ “hello” * 1 * 7 “my” * 1 2 * “world” $))
+
+;Welcome to DrRacket, version 8.6 [cs].
+;Language: racket, with debugging; memory limit: 1024 MB.
+;'(6 1 3 ((("" “hello”) “my”) “world”))
