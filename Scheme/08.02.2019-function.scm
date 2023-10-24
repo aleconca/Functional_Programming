@@ -22,6 +22,9 @@
   ;apply merge to data and store result of foldl in a new list
   ;why foldl? Tried in Dr Racket with foldr->same result; but still: why does it work with foldl?
   ;how is it possible that merge takes two inputs but I pass an arbitrary number of them and it still works?
+  ;are the two issues related? meanung that I am passing a list of lists to be left folded?
+  ;In this way I would fold elements that are ordered lists
+  ;take last two lists, order them, put the at the beginnin g of the final result (fold left)
   (foldl merge '() data))
 
 
