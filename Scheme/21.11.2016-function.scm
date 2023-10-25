@@ -12,7 +12,7 @@
 
  
 (fold-map (lambda(x)(+ x 1)) '() '(1 2 3))
-
+;'(4 3 2)
 
 ;2) Define filter as a fold (left or right, your choice).
 
@@ -23,3 +23,4 @@
 
  
 (fold-map (lambda(x)(< x 1)) '() '(1 -2 3))
+;'(#f #t #f)
