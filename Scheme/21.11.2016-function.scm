@@ -8,6 +8,7 @@
 (define (fold-map bf dest L)
   (if (null? L)
       dest
+      ;note that here the fact that cdr L is null during the last iteration is not an issue (cdr L) = () 
       (fold-map bf (cons (bf (car L)) dest) (cdr L))))
 
  
