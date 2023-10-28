@@ -5,28 +5,27 @@
 ;filled with the default value, implemented through vectors (i.e. a vector of vectors).
 
 
-(define (helper vect i n def)
-  
-  (if (< i n)
-      ((vector-set! vect i def)
-      (helper vect (+ i 1) n def))
-      ;else
-      vect
-      )
-  )
-
 ;input: n, def 
 ;output: nxn matrix filled with def
 ;hint: use vectors
 (define (def-sq-matrix n def)
   
   (let loop ((i 0) (vect (make-vector n)))
-           (vector-set! vect i (helper (make-vector n) 0 n def))
-           (when (< i n)
-               ( loop (+ i 1) ))
+    (when (< i n)
+       (vector-set! vect i (make-vector n def))
+       ( loop (+ i 1) vect ))
+    vect
     )
   
    )
+
+   
+
+;(make-vector size [v]) 
+;Returns a mutable vector with size slots, where all slots are initialized to contain v.
+;Note that v is shared for all elements, so for mutable data, mutating an element will affect other elements.  
+
+(def-sq-matrix 4 1)
 
 
 ;2) Let S = {0, 1, ..., n-1} x {0, 1, ..., n-1} for a natural number n. Consider a n by n matrix M, stored in a
