@@ -65,7 +65,7 @@
  (define size (vector-length m))
  (define seen? (create-matrix size #f));vettore di vettori (0:(#f #f #f) 1:(#f #f #f) 2:(#f #f #f))
   
- (call/cc (lambda (exit)
+ (call/cc (lambda (exit);implementa valore di ritorno
             
             (let loop ((i 0))
               (when (< i size)
