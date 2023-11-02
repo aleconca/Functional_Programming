@@ -12,6 +12,9 @@
 ;two continuations corresponding to the values 1 and 3
 ;will be stored in the global queue.
 
+
+
+
 ;global queue
 (define cont '())
 
@@ -19,20 +22,20 @@
 (define (use-cc)
   (let ((c (car cont)))
     (set! cont (cdr cont))    
-  c)
+  (c))
   )
 
 ;input: cond, L, body
 (define (for-each/cc cond L body)
   (for-each (lambda(x)
-                      (when(cond x)
-                        
-                           (call/cc (lambda(c)
-                                      (if (empty? cont)
-                                          (set! cont (list c))
-                                          (set! cont (cons c  cont)) )
-                                     body))
-                           ) )
+              
+              (call/cc (lambda(c)
+                      (when (cond x)
+                           (if (empty? cont)
+                               (set! cont (list c))
+                               (set! cont (append cont (list c))) )
+                                     ) (body x) )
+                           )) 
 
                        L)
  )
@@ -43,3 +46,9 @@
 ;2
 ;3
 ;4
+(newline)
+(use-cc) 
+(newline)
+(use-cc) 
+
+
