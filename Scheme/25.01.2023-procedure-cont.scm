@@ -29,12 +29,12 @@
 (define (for-each/cc cond L body)
   (for-each (lambda(x)
               
-              (call/cc (lambda(c)
+              (call/cc (lambda(c) ;chiama qui la continuation
                       (when (cond x)
                            (if (empty? cont)
                                (set! cont (list c))
                                (set! cont (append cont (list c))) )
-                                     ) (body x) )
+                                     ) (body x) ) ;passare paramentro a body
                            )) 
 
                        L)
