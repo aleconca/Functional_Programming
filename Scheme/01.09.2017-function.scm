@@ -47,7 +47,7 @@
 
 
 
-;THIS CODE DOESN'T WORK: should find a way to do it without cdr and car since we end up passing void lists to such structure which yields an error->(cdr '()) stop 1 iter 
+;------------------------------------------
 
 ; Define a tail-recursive helper function
  (define (count-xy x y z w res L)(
