@@ -17,19 +17,6 @@
 
 ;2) Define filter as a fold (left or right, your choice).
 
-(define (fold-filter bf dest L)
-  (if (null? L)
-      dest
-      (fold-filter bf (set! dest (bf (car L))) (cdr L))))
-
- 
-(fold-map (lambda(x)(< x 1)) '() '(1 -2 3))
-;'(#f #t #f)
-
-;ERROR: 
-;-remember map and filter take as input two arguments
-;-should have used a foldr in both cases directly
-
 ;SOL: easier than expected
 
 (define (fmap f l)
@@ -42,6 +29,22 @@
 
 (define (ffilter p l)
   (foldr (lambda (x y)(if (p x)(cons x y) y)) '() l))
+
+
+
+;-------------------------------------------------
+(define (fold-filter bf dest L)
+  (if (null? L)
+      dest
+      (fold-filter bf (set! dest (bf (car L))) (cdr L))))
+
+ 
+(fold-map (lambda(x)(< x 1)) '() '(1 -2 3))
+;'(#f #t #f)
+
+;ERROR: 
+;-remember map and filter take as input two arguments
+;-should have used a foldr in both cases directly
 
 
 
