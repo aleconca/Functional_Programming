@@ -38,8 +38,8 @@
  )
 
 (for-each/cc odd?  '(1 2 3 4)  (lambda (x) (displayln x)))
-(display cont)
-(newline)
-(use-cc)
-(display cont)
 
+;Then, if we run: (use-scc), we will get on screen:
+;2
+;3
+;4
