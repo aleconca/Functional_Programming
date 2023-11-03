@@ -28,7 +28,7 @@
 
 
 
-;NO LAMBDA:
+;NO LAMBDA:-------------------------------------------------------------------------------------------------
 
 
 ;fold-left-right takes as input a binary function, the accumulator and a list.
