@@ -27,3 +27,28 @@
             (cdr xs)))))     ; Move to the next element of the list by taking the cdr.
 
 
+
+;NO LAMBDA:
+
+
+;fold-left-right takes as input a binary function, the accumulator and a list.
+(define (fold-left-right f acc L)
+  (if (null? L)
+      acc
+      (if (eq? acc "")
+          (let ((pair  (cons (car L) (car L))))
+          (fold-left-right f pair (cdr L)))
+          (fold-left-right f 
+            (cons (car L) (append (list acc) (list (car L)))) (cdr L))  
+       )
+  )
+  )
+
+
+(fold-left-right string-append  ""  '("a" "b" "c") )
+;is the pair ("cba" . "abc")
+;'("c" ("b" ("a" . "a") "b") "c")
+
+
+
+
