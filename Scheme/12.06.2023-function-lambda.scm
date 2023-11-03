@@ -13,18 +13,16 @@
   ; i - the initial value for folding
   ; l - the list to be folded
   
-  (let loop ((left i)          ; Define a nested function 'loop' with parameters:
-             (right (lambda (x) x)) ; Initialize 'right' as an identity function
-             (xs l))          ; Initialize 'xs' with the input list 'l'
-    ; This is a tail-recursive loop that will iterate through the list 'l'.
-  
-    (if (null? xs)            ; If we have reached the end of the list:
-        (cons left (right i)) ; Return a cons node where 'left' is the result of fold-left
-                              ; and 'right' is the result of fold-right.
-      (loop (f (car xs) left) ; Apply the binary function 'f' to the head of the list and 'left'
-            (lambda (x)       ; Define a lambda function that takes 'x' as a parameter:
-              (right (f (car xs) x))) ; Apply 'f' to the head of the list and the result 'x' for 'right'
-            (cdr xs)))))     ; Move to the next element of the list by taking the cdr.
+  (let loop ((left i) (right (lambda (x) x))  (xs l))        
+    
+    (if (null? xs)            
+        (cons left (right i)) 
+                              
+      (loop (f (car xs) left)  (lambda (x) (right (f (car xs) x)))  (cdr xs)))))    
+
+
+(fold-left-right string-append  ""  '("a" "b" "c") )
+;'("cba" . "abc")
 
 
 
