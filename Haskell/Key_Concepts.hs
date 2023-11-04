@@ -67,12 +67,48 @@ lower case letters are type variables, so [a] stands for a list of elements of t
 
 
 
+
+
+
 >Types:
 
 -Static typing: we need to know the type of everything at compile time; '::' means 'has type'.
 
--User defined: 
--Recursive:Lists
+-User defined types: **
+are based on data declarations
+
+-- a "sum" type ( union in C), 'OR is | is sum'
+data Bool = False | True
+
+Bool is the type constructor, while False and True are data constructors.
+data and type constructors live in separate name-spaces, so it is possible to use the same name for both:
+
+-- a " product " type (struct in C)
+data Pnt a = Pnt a a
+
+if we apply a data constructor we obtain a value (e.g. Pnt 2.3 5.7), while with a type constructor we obtain a type (e.g. Pnt Bool).
+
+-Recursive: 
+Classical recursive **type** example:
+
+data Tree a = Leaf a | Branch ( Tree a ) ( Tree a )
+
+e.g. **data constructor** Branch has type:
+
+Branch :: Tree a -> Tree a -> Tree a
+
+An example tree:
+
+aTree = Branch ( Leaf ’a’) (Branch ( Leaf ’b’) ( Leaf ’c’) )
+
+We know that Lists are recursive types. Thus:
+
+data List a = Null | Cons a ( List a )
+
+but Haskell has special syntax for them; in 'pseudo-Haskell':
+
+data [ a ] = [] | a : [ a ]
+
 
 
 
