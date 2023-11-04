@@ -472,4 +472,7 @@ They are less commonly used and often reserved for specific advanced programming
 
 
 
->
+>Useful links:
+
+https://beautifulracket.com/#explainers
+https://docs.racket-lang.org/guide/
