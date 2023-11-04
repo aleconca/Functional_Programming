@@ -84,19 +84,22 @@ to define f while calling the map we can use any (+ 1), (1 +), (+).
 
 -Static typing: we need to know the type of everything at compile time; '::' means 'has type'.
 
--User defined types: **
-are based on data declarations
+1.Sum Type (Union Type):
 
--- a "sum" type ( union in C), 'OR is | is sum'
-data Bool = False | True
+Example: data Bool = False | True
 
-Bool is the type constructor, while False and True are data constructors.
-data and type constructors live in separate name-spaces, so it is possible to use the same name for both:
+Explanation: In this example, you are defining a custom data type called Bool. This type has two data constructors: False and True. 
+Bool is a sum type because it can have one of two possible values: False or True. It represents a logical value that can be either False or True.
 
--- a " product " type (struct in C)
-data Pnt a = Pnt a a
+2.Product Type (Struct-Like Type):
 
-if we apply a data constructor we obtain a value (e.g. Pnt 2.3 5.7), while with a type constructor we obtain a type (e.g. Pnt Bool).
+Example: data Pnt a = Pnt a a
+
+Explanation: In this example, you are defining a custom data type called Pnt (short for "point"). 
+It is a product type because it represents a structure that contains two values of type a. The data constructor for this type is also named Pnt. 
+You can create values of the Pnt type by applying the data constructor with two values of type a. For example, Pnt 2.3 5.7 creates a value of type Pnt Double.
+It's important to note that data constructors and type constructors live in separate namespaces. Data constructors are used to create values, while type constructors 
+are used to define new types. The type constructor Pnt is used to define the new type Pnt a, and the data constructor Pnt is used to create values of that type.
 
 
 -Recursive: 
