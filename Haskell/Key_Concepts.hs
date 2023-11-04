@@ -152,9 +152,53 @@ The comprehension generates a list of the sums.
 
 
 >Patterns:
--Case
--If
--let and where
+-Case:
+    take m ys = case (m , ys ) of
+    (0 , _ ) -> []
+    (_ ,[]) -> []
+    (n , x : xs ) -> x : take (n -1) xs
+
+-If: 
+    if <c> then <t> else <e>
+    
+-let and where:
+
+    let x = 3
+        y = 12
+    in x + y -- = > 15
+    
+    where can be convenient to scope binding over equations, e.g.:
+    
+    powset set = powset ’ set [[]] where
+    powset ’ [] out = out
+    powset ’ ( e : set ) out = powset ’ set ( out ++ [ e : x | x <- out ])
+
+Define a function called powset that computes the powerset of a given set. 
+The powerset of a set is the set of all possible subsets of that set, including the empty set and the set itself. 
+
+1.powset set = powset' set [[]]: This is the top-level definition of the powset function. It takes a single argument set and initializes the calculation by calling 
+the helper function powset' with the set and an initial list containing an empty list [[]].
+
+2.powset' [] out = out: This is the base case of the powset' function. When the input list set is empty, it returns the out value. In this context, 
+out represents the intermediate result, which starts with a single empty list.
+
+3.powset' (e : set) out = powset' set (out ++ [e : x | x <- out]): This is the recursive case of the powset' function. 
+It takes the head e and the tail set of the input list and the current out list.
+
+4.(e : x) constructs a new list by prepending the element e to each sublist x in the out list.
+[e : x | x <- out] is a list comprehension that applies this construction to all sublists in the out list.
+out ++ ... appends all the newly created sublists to the existing out list.
+By using recursion, the powset' function progressively calculates the powerset of the input set set. The base case ensures that when the input set is empty, 
+the calculation stops, and the result is returned.
+
+5.use this powset function by passing a list of elements, and it will return the powerset of that list as a list of lists. For example: powset [1, 2, 3]
+This call will return the powerset of the set [1, 2, 3].
+
+
+
+
+
+
 
 
 
