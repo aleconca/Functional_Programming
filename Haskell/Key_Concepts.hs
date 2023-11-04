@@ -13,7 +13,7 @@ used, it is never evaluated; if it is used several times, it is re-evaluated eac
 Call-by-need is a memoized version of call-by-name, meaning that if an argument is needed several times, it is evaluated only once and stored for subsequent compuations.
 
 In Haskell we have an explicit implementation of call-by-need, which is incorporated in the 'Delay' keyword. Delay promises to execute a compuation, moreover it caches 
-the evaluation and stores it for subsequent computations. To force evaluation we 'Force' the evaluation.
+the evaluation and stores it for subsequent computations. To force evaluation we 'seq' the evaluation.
 
 
 
@@ -44,12 +44,15 @@ to
 
 -Definition: Functions are defined through a series of equations;
 ex.
---inc n = n + 1
-length :: [ Integer ] -> Integer
-length [] = 0
-length ( x : xs ) = 1 + length xs
+
+1)inc n = n + 1
+
+2)length :: [ Integer ] -> Integer
+  length [] = 0
+  length ( x : xs ) = 1 + length xs
 
 this is also an example of pattern matching: arguments are matched with the right parts of equations, top to bottom; if the match succeeds, the function body is called.
+
 
 -Polymorphism:
 the previous definition of 'length' could work with any kind of lists, not just those made of integers; indeed, if we omit its type declaration, it is inferred 
@@ -59,7 +62,14 @@ length :: [ a ] -> Integer
 
 lower case letters are type variables, so [a] stands for a list of elements of type a, for any a.
 
--Composition: '$'
+ex. Map function:
+map f [] = []
+map f ( x : xs ) = f x : map f xs
+
+to define f while calling the map we can use any (+ 1), (1 +), (+).
+
+
+-Composition: '$' is used to do the standard function composition  (f.g)(x) is f(g(x)).
 
 
 
@@ -87,6 +97,7 @@ data and type constructors live in separate name-spaces, so it is possible to us
 data Pnt a = Pnt a a
 
 if we apply a data constructor we obtain a value (e.g. Pnt 2.3 5.7), while with a type constructor we obtain a type (e.g. Pnt Bool).
+
 
 -Recursive: 
 Classical recursive **type** example:
@@ -119,6 +130,17 @@ data [ a ] = [] | a : [ a ]
 
 
 >Infinite Lists:
+Convenient syntax for creating infinite lists is e.g. ones before can be also written as [1,1..]. numsFrom 6 is the same as [6..].
+We can create infinite lists also through list comprehension:
+ex.
+fib = 1 : 1 : [ a + b | (a , b ) <- zip fib ( tail fib )]
+1 : 1 creates a list [1, 1], which represents the first two elements of the Fibonacci sequence.
+
+[a + b | (a, b) <- zip fib (tail fib)] generates the rest of the Fibonacci sequence. It uses list comprehensions to calculate each element by adding the previous two elements. 
+(a, b) are pattern-matched from the result of zip fib (tail fib), which pairs up elements of the fib list with its tail (everything except the first element). 
+The comprehension generates a list of the sums.
+
+
 
 
 
