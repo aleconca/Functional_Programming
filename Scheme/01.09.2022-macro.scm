@@ -5,13 +5,3 @@
 ;continuation, we can use the associated construct run-cc (which may take parameters). The composition
 ;of store-cc must be managed using in the standard last-in-first-out approach.
 
-;E.g. if we run:
-;(define (test)
-; (define x 0)
-; (store-cc
-; (displayln "here")
-; (set! x (+ 1 x)))
-; (displayln x)
-; (set! x (+ 1 x))
-; x)
-;(test)
