@@ -17,8 +17,4 @@
   )
 
 
-  ;Another solution:
-  (define (list-to-compose lst)
-   (lambda (x)
-           (foldr (lambda (y acc) (y acc)) x lst)))
-
+ 
