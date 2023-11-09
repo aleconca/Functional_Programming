@@ -324,12 +324,72 @@ data Tr a = Lf a | Tr a :^: Tr aderiving (Show, Eq)
 
 
 
+Pathway to Monads:
 
->Foldable: foldl, foldr
->Functor: Trees
->Applicative: Lists, Trees
--Applicative Functors: Maybe
->Monads: State, Trees, Lists
+>Class Foldable: foldl, foldr
+Foldable is a class used for folding, of course. The main idea is the one we know from foldl and foldr for lists:
+we have a container, a binary operation f , and we want to apply f to all the elements in the container, starting from a value z.
+
+Recall their definitions:
+
+foldr f z [] = z
+foldr f z (x:xs) = f x (foldr f z xs)
+
+foldl f z [] = z
+foldl f z (x:xs) = foldl f (f z x) xs
+
+Let’s go back to our binary trees:
+data Tree a = Empty | Leaf a | Node (Tree a) (Tree a)
+
+we can easily define a foldr for them:
+tfoldr f z Empty = z
+tfoldr f z (Leaf x) = f x z
+tfoldr f z (Node l r) = tfoldr f (tfoldr f z r) l
+
+instance Foldable Tree where
+         foldr = tfoldr
+         
+
+
+
+>Class Functor: Trees
+Functor is the class of all the types that offer a map operation; the map operation of functors is called fmap and has type:
+fmap :: (a -> b) -> f a -> f b
+
+Well-defined functors should obey the following laws:
+1.fmap id = id (where id is the identity function)
+2.fmap (f . g) = fmap f . fmap g (homomorphism)
+
+Trees can be instances of functors too. First, let us define a suitable map for trees:
+tmap f Empty = Empty
+tmap f (Leaf x) = Leaf $ f x
+tmap f (Node l r) = Node (tmap f l) (tmap f r)
+
+That’s all we need:
+instance Functor Tree where
+         fmap = tmap
+
+
+        
+>Class Applicative: 
+
+-Applicative Functors: Maybe, Lists, Trees
+In our voyage toward monads, we must consider also an extended version of functors, i.e. Applicative functors.
+The definition looks indeed exotic:
+
+--extend functors
+class (Functor f) => Applicative f where
+    pure :: a -> f a
+    (<*>) :: f (a -> b) -> f a -> f b
+
+note that f is a type constructor, and f a is a Functor type; moreover, f must be parametric with one parameter, if f is a container, the idea is not too complex:
+pure takes a value and returns an f containing it
+<*> is like fmap, but instead of taking a function, takes an f containing a function, to apply it to a suitable container of the same kind.
+
+
+
+
+-->Class Monads: State, Trees, Lists
 
 
 
