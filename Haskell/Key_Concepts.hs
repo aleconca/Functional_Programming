@@ -338,6 +338,13 @@ data Tr a = Lf a | Tr a :^: Tr aderiving (Show, Eq)
 
 
 
+
+
+
+
+
+
+
 >I/O:
 main is the default entry point of the program (like in C)
     main = do {
@@ -347,6 +354,31 @@ main is the default entry point of the program (like in C)
     }
 
 >Exceptions:
+We can read a file:
+
+import System.IO
+import System.Environment
+    readfile = do {
+    args <- getArgs; -- command line arguments
+    handle <- openFile (head args) ReadMode;
+    contents <- hGetContents handle; -- note: lazy
+    putStr contents;
+    hClose handle;
+    }
+main = readfile
+
+and we can catch exceptions:
+
+import Control.Exception
+import System.IO.Error
+...
+main = handle handler readfile
+    where handler e
+        | isDoesNotExistError e =
+        putStrLn "This file does not exist."
+        | otherwise =
+        putStrLn "Something is wrong."
+
 
 
 
@@ -358,9 +390,27 @@ main is the default entry point of the program (like in C)
 
 
 >Classical Data Structures: 
--arrays
--hash-tables
--maps
+
+-arrays:
+import Data.Array
+exarr = let m = listArray (1,3) ["alpha","beta","gamma"]
+            n = m // [(2,"Beta")]
+            o = n // [(1,"Alpha"), (3,"Gamma")]
+            in (m ! 1, n ! 2, o ! 1)
+            
+exarr evaluates to ("alpha","Beta","Alpha").
+
+-hash-tables;
+
+-maps:
+import Data.Map
+exmap = let m = fromList [("nose", 11), ("emerald", 27)]
+            n = insert "rug" 98 m
+            o = insert "nose" 9 n
+            in (m ! "emerald", n ! "rug", o ! "nose")
+            
+exmap evaluates to (27,98,9).
+
 
 
 
