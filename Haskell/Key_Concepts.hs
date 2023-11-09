@@ -6,6 +6,9 @@ Haskell computations are purely functional, meaning that computations do not pro
 
 
 
+
+
+
 >Call-by-need:
 In order to understand call-by-need we need to understand call-by-name first. In call-by-name, arguments in functions are evaluated in an outermost fashion, 
 this means that functions are applied before their arguments are computed. This is called passing arguments 'by name'. In call-by-name when an arguments is not
@@ -14,6 +17,8 @@ Call-by-need is a memoized version of call-by-name, meaning that if an argument 
 
 In Haskell we have an explicit implementation of call-by-need, which is incorporated in the 'Delay' keyword. Delay promises to execute a compuation, moreover it caches 
 the evaluation and stores it for subsequent computations. To force evaluation we 'seq' the evaluation.
+
+
 
 
 
@@ -34,6 +39,10 @@ from
 (lambda(x y)(+ 1 x y))
 to
 \x y -> 1+x+y
+
+
+
+
 
 
 
@@ -207,7 +216,38 @@ This call will return the powerset of the set [1, 2, 3].
 
 
 
->ADT:
+>ADT (Abstract Data Type):
+One main characteristic of ADT is that we can define an abstract 'interface' containing a coincise summary
+of the imported functions without delving into their implementation. Therefore, we say that the representation type is hidden.
+
+--TreeADT.hs
+module TreeADT ( 
+Tree , leaf , branch , cell ,
+left , right , isLeaf 
+) where
+
+data Tree a -- just the type name
+leaf :: a -> Tree a --signatures
+branch :: Tree a -> Tree a -> Tree a
+cell :: Tree a -> a
+left , right :: Tree a -> Tree a
+isLeaf :: Tree a -> Bool
+
+
+--actual implementation in Main.hs
+import TreeADT
+
+data Tree a = Leaf a | Branch ( Tree a ) ( Tree a )
+
+leaf = Leaf
+branch = Branch
+cell ( Leaf a ) = a
+left ( Branch l r ) = l
+right ( Branch l r ) = r
+isLeaf ( Leaf _ ) = True
+isLeaf _ = False
+
+
 
 
 
@@ -218,11 +258,45 @@ This call will return the powerset of the set [1, 2, 3].
 
 
 >Type classes:
--Eq
--Ord
--Num
--Show
->Deriving
+In Haskell, type classes provide a way to define sets of operations that can be implemented by multiple types.
+
+-Eq:
+class Eq a where
+     (==) :: a -> a -> Bool
+
+Then we can provide multiple implementations by defining instances :
+instance Eq Int where
+     x==y = x Prelude.==y
+
+or:
+instance (Eq a) => Eq (Tree a) where
+    -- type a must support equality as well
+    Leaf a == Leaf b = a == b
+    (Branch l1 r1) == (Branch l2 r2) = (l1==l2) && (r1==r2)
+     _ == _ = False
+
+ 
+-Ord:
+we can also extend Eq with comparison operations:
+
+class (Eq a) => Ord a where
+    (<), (<=), (>=), (>) :: a -> a -> Bool
+    max, min :: a -> a -> a
+
+Can do the same with other classes
+-Num:
+Numeric types in the prelude include Int, Integers and Rationals. They come with predefined instances of the class Num.
+The Num class implements the standard numeric operations. When you use numeric literals or values of type Int,Integer, etc., 
+you can directly apply numeric operations without explicitly define instaances.
+
+-Show:
+instance Show (a -> b) where
+   show f = "<< a function >>"
+
+or:
+instance Show a => Show (Tree a) where
+    show (Leaf a) = show a
+    show (Branch x y) = "<" ++ show x ++ " | " ++ show y ++ ">"
 
 
 
@@ -231,7 +305,18 @@ This call will return the powerset of the set [1, 2, 3].
 
 
 
->Defining Instances:
+    
+>Deriving:
+usually it is not necessary to explicitly define instances of some classes, e.g.Eq and Show.
+Haskell can be quite smart and do it automatically, by using deriving keyword.
+
+infixr 5 :^:
+data Tr a = Lf a | Tr a :^: Tr aderiving (Show, Eq)
+
+
+
+
+
 
 
 
@@ -254,6 +339,13 @@ This call will return the powerset of the set [1, 2, 3].
 
 
 >I/O:
+main is the default entry point of the program (like in C)
+    main = do {
+    putStr "Please, tell me something>";
+    thing <- getLine;
+    putStrLn $ "You told me \"" ++ thing ++ "\".";
+    }
+
 >Exceptions:
 
 
