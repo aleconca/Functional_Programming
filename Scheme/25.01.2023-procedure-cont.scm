@@ -36,11 +36,12 @@
                (body (car L)) );for-each/cc will call this on every value BUT 
                                ;when we will call each saved cont, there the context is switched, the value on which we set! the cont in the gloabal queue is discarded.
                                ;We will resume computations starting from the recursive call, so the current value is discarded and not displayed.
-       )))
+       )
+     )
 
   ;OTHER PART OF CONTEXT------
-  (for-each/cc cond (cdr L) body)
-  )
+  (for-each/cc cond (cdr L) body) )
+  
 
 ;ANOTHER SOLUTION:--------------------------------------------------------------------------------------------------------
 
