@@ -32,11 +32,17 @@
 ;vector of vectors, containing pairs (x,y) ∈ S, as a function from S to S (e.g. f(2,3) = (1,0) is represented
 ;by M[2][3] = (1,0)). Define a procedure to check if M defines a bijection (i.e. a function that is both injective and surjective) 
 
+
+;Keyword: A continuation is the variable we pass to the lambda. When we call it, we save the context, i.e. anything that comes before and after.
+;when we unvoke the continuation, we switch from the code to the saved context.
+
 (define (bijection? m)
+;CONTEXT----------------------------
  (define size (vector-length m))
  (define seen? (create-matrix size #f));vettore di vettori (0:(#f #f #f) 1:(#f #f #f) 2:(#f #f #f))
+;until here-------------------------
   
- (call/cc (lambda (exit);implementa valore di ritorno
+ (call/cc (lambda (exit);create the continuation-->exit variable
             
             (let loop ((i 0))
               (when (< i size)
@@ -47,44 +53,27 @@
                     (let ((datum (vector-ref (vector-ref m i) j)))
                       ;se  datum=(0,2) : (vector-ref 0:(#f '#f' #f) 2) == '#f'
                       (if (vector-ref (vector-ref seen? (car datum)) (cdr datum))
-                          (exit #f);non devo rivisitare il punto due volte, i.e. ad ogni x deve corrispondere 1 ed 1 sola y
-                                   ;chiama la continuation e ritorna #f
+                          
+                          (exit #f);what do we do here? we call the continuation, so we exchange all the loops code with the saved context.
+                                   ;our code becomes: (define (bijection? m) 
+                                                        ;(define size (vector-length m))
+                                                        ;(define seen? (create-matrix size #f)) 
+                                                        ;(call/cc (lambda (exit) (#f)))
+                                                      ;)
+                                   ;so in the end we get a false.
+
+                          
                           (vector-set! (vector-ref seen? (car datum)) (cdr datum) #t)));seen
             
                     (loop1 (+ 1 j))))
                 (loop (+ 1 i))))
             
-            #t)
+            #t);lambda must return something-->we return true if everything went well
           )
+  ;NO OTHER CONTEXT--------------------------------------------------------------------------------
   )
 
 
-;------------------------------------------------------------------------
-
-;input: vector of vectors
-;output: #f/#t
-(define (is-bijective mat )
-  (define n (vector-length mat))
-
-  (call/cc (lambda (exit)
-             
-             (let loop ((i 0))
-               (when (< i n)
-                 (let loop1 ((j 0))
-                   (when (< j n)
-
-                     ;M[i][j]==M[j][i]?
-                     (cond (not (eq? (vector-ref (vector-ref mat i) j ) (vector-ref (vector-ref mat j) i )))
-                           (exit #f)
-                           )
-          
-                     (loop1 (+ j 1))))
-                 (loop (+ i 1)))
-               )
-             
-            #t)
-          )
- )
 
 
 
