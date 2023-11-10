@@ -13,6 +13,30 @@
 ;will be stored in the global queue.
 
 
+;SOL:
+(define queue '())
+
+(define (use-cc)
+  (if (not (null? queue))
+      (let (c (car queue)) 
+        (set! queue (cdr queue))
+        (c))
+  )    
+ )
+
+(define (for-each/cc cond L body)
+  (if (not (null? L))
+      (call/cc (lambda(cont)
+                 (if (cond (car L))
+                     (set! queue (append queue (list cont)))
+                     )
+               (body (car L)) )
+       )))
+  
+  (for-each/cc cond (cdr L) body)
+  )
+
+;ANOTHER SOLUTION:--------------------------------------------------------------------------------------------------------
 
 
 ;global queue
