@@ -31,3 +31,44 @@
 risultato ; Stampa 42
 
 ;In Scheme, le funzioni restituiscono un valore attraverso la valutazione dell'ultima espressione nel loro corpo.
+
+
+;Other continuations-----------------------------------------------------------------------------------------------
+#lang racket
+
+; call/cc : ((α → β) → α) → α
+
+; call/cc : ?
+
+(+ 2 3)
+
+
+(+ 2 (call/cc (λ (continuation) 3)))
+
+; call/cc : (? → ?) → Number
+
+(+ 2 (call/cc (λ (continuation) (continuation 3))))
+; (define (continuation x) (+ 2 x))
+
+; call/cc : ((Number → ?) → ?) → Number
+
+(+ 2 (call/cc (λ (continuation) (continuation 3) 6)))
+
+; call/cc : ((Number → ?) → Number) → Number
+
+(+ 2 (call/cc (λ (continuation) (zero? (continuation 3)) 6)))
+(+ 2 (call/cc (λ (continuation) (string-length (continuation 3)) 6)))
+
+; call/cc : ((Number → β) → Number) → Number
+
+(string-append "Hello " (call/cc (λ (continuation) (zero? (continuation "World")) "NOT ME")))
+
+; call/cc : ((α → β) → α) → α
+
+(write (if #t 23 "Hello"))
+
+
+(string-append "Hello " (call/cc (λ (continuation) (zero? (continuation "World")) #f)))
+
+; call/cc : ((α → β) → γ) → (α ∪ γ)
+
