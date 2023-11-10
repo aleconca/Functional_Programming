@@ -25,14 +25,20 @@
  )
 
 (define (for-each/cc cond L body)
+  ;CONTEXT--------------------
   (if (not (null? L))
+  ;--------------------------- 
+      
       (call/cc (lambda(cont)
                  (if (cond (car L))
-                     (set! queue (append queue (list cont)))
+                     (set! queue (append queue (list cont)));FIFO queue. NOT A STACK.
                      )
-               (body (car L)) )
+               (body (car L)) );for-each/cc will call this on every value BUT 
+                               ;when we will call each saved cont, there the context is switched, the value on which we set! the cont in the gloabal queue is discarded.
+                               ;We will resume computations starting from the recursive call, so the current value is discarded and not displayed.
        )))
-  
+
+  ;OTHER PART OF CONTEXT------
   (for-each/cc cond (cdr L) body)
   )
 
