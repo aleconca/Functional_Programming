@@ -1,6 +1,9 @@
 #lang racket
 
-;a contin­u­a­tion is a func­tion
+;Keyword: A continuation is the variable we pass to the lambda. When we call it, we save the context, i.e. anything that comes before and after.
+;when we unvoke the continuation, we switch from the code to the saved context.
+
+;a contin­u­a­tion 
 (define c #f)
 (+ 1 (+ 2 (+ 3 (+ (let/cc here (set! c here) 4) 5)))) ; 15
 (+ 1 (+ 2 (+ 3 (+ 20 5)))) ; 31 (same as `(c 20)`)
