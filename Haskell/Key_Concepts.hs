@@ -327,6 +327,7 @@ data Tr a = Lf a | Tr a :^: Tr aderiving (Show, Eq)
 
 
 Pathway to Monads: http://learnyouahaskell.com/a-fistful-of-monads#the-monad-type-class
+                   https://wiki.haskell.org/All_About_Monads  
 
 >Class Foldable: foldl, foldr
 Foldable is a class used for folding, of course. The main idea is the one we know from foldl and foldr for lists:
@@ -444,7 +445,7 @@ instance Monad Maybe where
     fail _ = Nothing
 
 
-    
+ 
 -State Monad:
 Define a type to represent our state:
 
