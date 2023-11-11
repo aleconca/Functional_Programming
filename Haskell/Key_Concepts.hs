@@ -324,6 +324,8 @@ data Tr a = Lf a | Tr a :^: Tr aderiving (Show, Eq)
 
 
 
+
+
 Pathway to Monads:
 
 >Class Foldable: foldl, foldr
@@ -399,7 +401,7 @@ class Applicative m => Monad m where
     -- Sequentially compose two actions, passing any value produced by the first as an argument to the second.
     (>>=) :: m a -> (a -> m b) -> m b
     
-    -- Sequentially compose two actions, discarding any value produced by the first, like sequencing operators (such as the semicolon) in imperative languages.
+    -- Sequentially compose two actions (Bind), discarding any value produced by the first.
     (>>) :: m a -> m b -> m b
     m >> k = m >>= \_ -> k
     
@@ -453,8 +455,7 @@ the idea is quite simple: in a value of type 'State st a' we apply 'f' to the va
 Then, we need to make State an instance of Applicative:
 
 instance Applicative (State st) where
-    pure x = State (\t -> (t, x))
-    
+    pure x = State (\t -> (t, x))    
     (State f) <*> (State g) = State (\s0 -> let (s1, f’) = f s0
                                                 (s2, x) = g s1
                                             in (s2, f’ x))
@@ -472,6 +473,8 @@ In particular, we obtain a function of the initial state. To get a value out of 
 
 runStateM :: State state a -> state -> (state, a)
 runStateM (State f) st = f st
+
+
 
 
 
@@ -520,6 +523,8 @@ main = handle handler readfile
         putStrLn "This file does not exist."
         | otherwise =
         putStrLn "Something is wrong."
+
+
 
 
 
