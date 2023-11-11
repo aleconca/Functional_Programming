@@ -441,8 +441,14 @@ instance Monad Tree where
 
 
 
->I/O:
-main is the default entry point of the program (like in C)
+
+
+
+
+
+>I/O: N.B. IO is a built-in Monad in Haskell.
+main is the default entry point of the program (like in C):
+
     main = do {
     putStr "Please, tell me something>";
     thing <- getLine;
