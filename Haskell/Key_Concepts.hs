@@ -438,7 +438,13 @@ instance Monad Tree where
     xs >>= f = tconcmap f xs
     fail _ = Empty
 
+instance Monad Maybe where
+    (Just x) >>= k = k x
+    Nothing >>= _ = Nothing
+    fail _ = Nothing
 
+
+    
 -State Monad:
 Define a type to represent our state:
 
