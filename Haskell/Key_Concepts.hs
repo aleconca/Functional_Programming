@@ -437,6 +437,46 @@ instance Monad Tree where
     fail _ = Empty
 
 
+-State Monad:
+Define a type to represent our state:
+
+data State st a = State (st -> (st, a))
+
+the idea is having a type that represent a computation with a state, i.e. a function taking the current state and returning the next.
+First, we know that we need to make State an instance of Functor:
+
+instance Functor (State st) where
+    fmap f (State g) = State (\s -> let (s’, x) = g s
+                                    in (s’, f x))
+
+the idea is quite simple: in a value of type 'State st a' we apply 'f' to the value of type a (like in all the other examples).
+Then, we need to make State an instance of Applicative:
+
+instance Applicative (State st) where
+    pure x = State (\t -> (t, x))
+    
+    (State f) <*> (State g) = State (\s0 -> let (s1, f’) = f s0
+                                                (s2, x) = g s1
+                                            in (s2, f’ x))
+
+
+instance Monad (State state) where
+    State f >>= g = State (\olds -> let (news, value) = f olds
+                                        State f’ = g value
+                                    in f’ news)
+
+
+
+An important aspect of this monad is that monadic code does not get evaluated to data, but to a function! (Note that State is a function and bind is function composition).
+In particular, we obtain a function of the initial state. To get a value out of it, we need to call it:
+
+runStateM :: State state a -> state -> (state, a)
+runStateM (State f) st = f st
+
+
+
+
+
 
 
 
