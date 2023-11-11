@@ -370,9 +370,9 @@ instance Functor Tree where
          fmap = tmap
 
 
+
         
 >Class Applicative: 
-
 -Applicative Functors: Maybe, Lists, Trees
 In our voyage toward monads, we must consider also an extended version of functors, i.e. Applicative functors.
 The definition looks indeed exotic:
@@ -383,22 +383,58 @@ class (Functor f) => Applicative f where
     (<*>) :: f (a -> b) -> f a -> f b
 
 note that f is a type constructor, and f a is a Functor type; moreover, f must be parametric with one parameter, if f is a container, the idea is not too complex:
-pure takes a value and returns an f containing it
+pure takes a value and returns an f containing it.
 <*> is like fmap, but instead of taking a function, takes an f containing a function, to apply it to a suitable container of the same kind.
 
 
 
 
 -->Class Monads: State, Trees, Lists
+A monad is an algebraic data type used to represent computations. We can also call them actions. Monads allow us to chain actions together
+to build an ordered sequence, in which each action is decorated with addittional processing rules provided by the monad and performed automatically.
 
+Here we have the Monad class, which extends the Applicative class:
 
+class Applicative m => Monad m where
+    -- Sequentially compose two actions, passing any value produced by the first as an argument to the second.
+    (>>=) :: m a -> (a -> m b) -> m b
+    
+    -- Sequentially compose two actions, discarding any value produced by the first, like sequencing operators (such as the semicolon) in imperative languages.
+    (>>) :: m a -> m b -> m b
+    m >> k = m >>= \_ -> k
+    
+    -- Inject a value into the monadic type.
+    return :: a -> m a
+    return = pure
+    
+    -- Fail with a message.
+    fail :: String -> m a
+    fail s = error s
 
+Note that we will need to implement only (>>=), while all the other methods have standard definitions.
 
+For a monad to behave correctly, method definitions must obey the following laws:
 
+1. return is the identity element:
+    (return x) >>= f <=> f x
+    m >>= return <=> m
 
+2. associativity for binds:
+    (m >>= f) >>= g <=> m >>= (\x -> (f x >>= g))
+    (monads are analogous to monoids, with return = 1 and >>= = ·)
 
+An example with Lists: List: monadic binding involves joining together a set of calculations for eachvalue in the list.
+--make Lists an instance of Monad
+instance Monad [] where
+    xs >>= f = concatMap f xs
+    fail _ = []
 
+[1,2,3] >>= (\x -> [1,2,3] >>= (\y -> return (x,y)))
 
+Can do the same for Trees:
+instance Monad Tree where
+    xs >>= f = tconcmap f xs
+    fail _ = Empty
 
 
 
@@ -450,7 +486,6 @@ main = handle handler readfile
 
 
 >Classical Data Structures: 
-
 -arrays:
 import Data.Array
 exarr = let m = listArray (1,3) ["alpha","beta","gamma"]
