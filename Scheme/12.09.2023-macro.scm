@@ -81,37 +81,3 @@
 
 
 
-;MINE:
-
-(define (multifun (f . rest1) (x ...) (b . rest2))
-  
-  (begin
-
-   ;define the anonymous procedure using a lambda function
-   (define f (lambda(x ...) (b)))
-   
-   ;make it tail recursive
-   (multifun rest1 (x ...) rest3) 
-  
-  )
-  )
-
-
-;WRONG!! why?
-
-;Rebinding of f: trying to redefine f within the lambda, which is not allowed.
-
-;Recursion: this recursive approach doesn't work for defining functions.
-
-;Parameter Lists: The use of (f . rest1) and (x ...) (b . rest2) as parameters is not a standard way to define a procedure, and it's likely to cause syntax errors.
-;Cons cells are not typically used to define input arguments in Scheme procedures. Input arguments in Scheme (and most programming languages) are usually specified 
-;using standard parameter lists.
-
-
-
-
-
-
-
-
-              
