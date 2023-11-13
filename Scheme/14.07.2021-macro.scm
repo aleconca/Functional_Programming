@@ -8,7 +8,7 @@
 
 (define ret-store '())
 
-(define (ret v)
+(define (ret v) ;is ret implicitly called?
   ((car ret-store) v));why not an apply? Apply is used when you want to apply a procedure to a list of arguments
 
 ;define contruct
@@ -55,13 +55,15 @@
     ((_ f (var ...) e ...)
      (define (f var ...)
        (call/cc (lambda (cont)
-                  (set! saved-cc (cons cont saved-cc))
-                  e ...))))))
+                  (set! saved-cc (cons cont saved-cc))))
+      e ...))))
 
 (defun my-function (a b)
   (+ a b 1))
 
 (my-function 5 2)
+
+(ret 3)
   
 
 
