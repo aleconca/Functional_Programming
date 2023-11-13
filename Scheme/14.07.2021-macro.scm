@@ -65,7 +65,7 @@
 
 (ret 3)
   
-;But like this we would get 2 return values while I want a return only for ret.
+;But like this we would get 2 return values while I want a return only for ret. Also, I am forced to call the function.
 
 
 
