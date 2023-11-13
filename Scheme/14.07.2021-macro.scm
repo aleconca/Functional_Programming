@@ -48,9 +48,7 @@
 (define (ret x)
   (let ((c (car saved-cc)))
     (set! saved-cc (cdr saved-cc))
-    (c x))
-  )
-
+    (c x)))
 
 (define-syntax defun
   (syntax-rules ()
@@ -59,6 +57,13 @@
        (call/cc (lambda (cont)
                   (set! saved-cc (cons cont saved-cc))
                   e ...))))))
+
+(defun my-function (a b)
+  (+ a b 1))
+
+(define result (my-function 5 2))
+
+(display result) ; This will print 8
   
 
 
