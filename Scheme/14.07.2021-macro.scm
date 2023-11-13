@@ -63,7 +63,8 @@
       )
 
 
-;Not sure wheter we would evaluate the body and have a return value or not.
+;Not sure wheter we would evaluate the body and have a return value or not. This is probably why we need the out variable evaluated as
+;the body of the lambda.
 
 
 
