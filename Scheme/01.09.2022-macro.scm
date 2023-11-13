@@ -17,7 +17,7 @@
 (define-syntax store-cc
   (syntax-rules()
     ((_ e ...)
-       (call/cc (lambda(x) (set! saved-cc (cons (list x)(saved-cont))) ))
+       (call/cc (lambda(x) (set! saved-cc (cons (list x)(saved-cont)))) )
          e...))
   )
 
