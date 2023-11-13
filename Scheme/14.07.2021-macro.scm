@@ -16,7 +16,7 @@
   (syntax-rules ()
     ;define pattern to match
     ((_ fname (var ...) body ...)
-     ;define behaviour
+     ;define behaviour, perchè no begin?
      (define (fname var ...)
        (let ((out ;CONTEXT up--------------------------------------
                   (call/cc (lambda (c)
