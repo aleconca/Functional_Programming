@@ -38,8 +38,8 @@
 
 ;no begin here:
 ;In Scheme, the begin form is used to sequence multiple expressions and return the value of the last one. It's not needed in all situations.
-;In the case of the defun macro you provided, it's not necessary to use begin because you are defining a procedure using let to bind the result of the expressions, 
-;and you are not looking for a value to return within a sequence of expressions.
+;In the case of the defun macro you provided, it's not necessary to use begin because we are defining a procedure using let to bind the result of the expressions, 
+;and we are not looking for a value to return within a sequence of expressions.
 
 ;Could have I done it like this?
 
