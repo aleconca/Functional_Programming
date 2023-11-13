@@ -19,20 +19,24 @@
 ;10
 ;6
 
+;define name of the contruct
 (define-syntax block
+  ;define a sort of 'lambda' that takes all the wxtra literal-ids we need to do pattern-matching
   (syntax-rules ( then where <-)
+    ;define the pattern to match
     ((_ (exp1 ...) then (exp2 ...) where (var <- val1 val2) ...)
+     ;define the desired behaviour you want to have once the pattern is matched
      (begin
        (let ((var val1) ...)
          exp1 ...)
        (let ((var val2) ...)
-         exp2 ...)
+         exp2 ...);beware that you always need a space between id and elipsis
        )
      )
     )
   )
 
-
+;test
 (block
  ((displayln (+ x y))
   (displayln (* x y))
