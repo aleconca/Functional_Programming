@@ -1,6 +1,6 @@
 #lang racket
 
-;Define a new construct called block-then which creates two scopes for variables, declared after the
+;Define a new construct called block which creates two scopes for variables, declared after the
 ;scopes, with two different binding. E.g. the evaluation of the following code:
 
 ;(block
