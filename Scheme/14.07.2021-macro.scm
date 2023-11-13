@@ -46,21 +46,20 @@
 (define saved-cc '())
 
 (define (ret x)
-  (let (c (car saved-cc))
+  (let ((c (car saved-cc)))
     (set! saved-cc (cdr saved-cc))
     (c x))
   )
 
 
 (define-syntax defun
-  (syntax-rules()
+  (syntax-rules ()
     ((_ f (var ...) e ...)
-      (define f var ...)
-       ((call/cc (lambda(cont)
-                   (set! saved-cc (cons cont saved-cc))))
-                   e ... ) )
-         ) 
-      )
+     (define (f var ...)
+       (call/cc (lambda (cont)
+                  (set! saved-cc (cons cont saved-cc))
+                  e ...))))))
+  
 
 
 ;Not sure wheter we would evaluate the body and have a return value or not. This is probably why we need the out variable evaluated as
