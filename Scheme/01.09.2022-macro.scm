@@ -16,14 +16,9 @@
 
 (define-syntax store-cc
   (syntax-rules()
-    ((_ condition body ...)
-     (when condition
+    ((_ e ...)
        (call/cc (lambda(x) (set! saved-cc (cons (list x)(saved-cont))) ))
-       (begin
-         body...))))
+         e...)))
   )
 
-;cosa significa fare apply tra una continuation e un parametro?
-;perchè posso definire semplicemente (_ e ...) senza una condizione da verificare? Quell' 'e' corrisponde ad un body?
-;cosa posso/devo mettere nel (syntax-rules()( ))?
-;perchè in questo caso posso salvare direttamente il cons senza convertire in lista?
+
