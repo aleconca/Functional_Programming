@@ -61,9 +61,7 @@
 (defun my-function (a b)
   (+ a b 1))
 
-(define result (my-function 5 2))
-
-(display result) ; This will print 8
+(my-function 5 2)
   
 
 
