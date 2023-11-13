@@ -9,7 +9,7 @@
 (define ret-store '())
 
 (define (ret v)
-  ((car ret-store) v));why not an apply?
+  ((car ret-store) v));why not an apply? Apply is used when you want to apply a procedure to a list of arguments
 
 ;define contruct
 (define-syntax defun
