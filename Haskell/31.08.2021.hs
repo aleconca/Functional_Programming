@@ -15,7 +15,10 @@ instance Applicative Slist where
     pure v = Slist l pure v
     (Slist x fs)<*>(Slist y xs) = Slist (x*y) (fs<*>xs)
 
+makeSlist v = Slist (length v) v
+
 instance Monad Slist where
     fail Slist _ = Slist 0 []
     (Slist n xs) >>= f = makeSlist (xs >>= (\x -> let Slist n xs = f x
                                                   in xs))
+
