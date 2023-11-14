@@ -11,6 +11,12 @@ instance Foldable Slist where
 instance Functor Slist where
     fmap f (Slist n xs) = Slist n fmap xs
 
+{-
+1. pure should take a value of any type and return an applicative functor with that value inside it. 
+
+2. <*> takes a functor that has a function in it and another functor and sort of extracts that function from the first functor and then maps 
+it over the second one. When I say extract, I actually sort of mean run and then extract, maybe even sequence. 
+-}
 instance Applicative Slist where
     pure v = Slist l pure v
     (Slist x fs)<*>(Slist y xs) = Slist (x*y) (fs<*>xs)
