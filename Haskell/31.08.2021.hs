@@ -33,8 +33,33 @@ instance Applicative Maybe where
 -}
 instance Applicative Slist where
     pure v = Slist l pure v
-    (Slist x fs)<*>(Slist y xs) = Slist (x*y) (fs<*>xs) --iterate
+    (Slist x fs)<*>(Slist y xs) = Slist (x*y) (fs<*>xs) --iterate, come apply in scheme
 
+    
+{- 
+class (Applicative m) = > Monad m where but we write
+
+class Monad m where  
+    return :: a -> m a --does the same thing as the pure function from the Applicative type class 
+  
+    (>>=) :: m a -> (a -> m b) -> m b  -- bind. It's like function application, only instead of taking a normal value and feeding it to a normal function, 
+                                          it takes a monadic value (that is, a value with a context) and feeds it to a function that takes a normal value but 
+                                          returns a monadic value.
+  
+    (>>) :: m a -> m b -> m b -- default implementation
+    x >> y = x >>= \_ -> y  
+  
+    fail :: String -> m a  -- fail. We never use it explicitly in our code.
+    fail msg = error msg 
+    
+example:
+instance Monad Maybe where  
+    return x = Just x  
+    Nothing >>= f = Nothing  
+    Just x >>= f  = f x  
+    fail _ = Nothing 
+    
+-}
 makeSlist v = Slist (length v) v
 
 instance Monad Slist where
