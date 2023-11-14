@@ -18,7 +18,9 @@ instance Functor Slist where
 it over the second one. When I say extract, I actually sort of mean run and then extract, maybe even sequence. 
 -}
 instance Applicative Slist where
+    --pure :: a -> f a
     pure v = Slist l pure v
+    --(<*>) :: f (a -> b) -> f a -> f b
     (Slist x fs)<*>(Slist y xs) = Slist (x*y) (fs<*>xs)
 
 makeSlist v = Slist (length v) v
