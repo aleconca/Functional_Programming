@@ -1,4 +1,6 @@
 Category theory for programmers: https://unglueit-files.s3.amazonaws.com/ebf/e90890f0a6ea420c9825657d6f3a851d.pdf
+Category Theory (Oxford Logic Guides): https://dl1.cuni.cz/pluginfile.php/1387491/mod_resource/content/1/Category%20Theory%20by%20Steve%20Awodey.pdf
+https://keybase.theophile.me/info/conceptual-maths-category-theory.pdf
 
 >Haskell is pure:
 Haskell computations are purely functional, meaning that computations do not produce side-effects.
