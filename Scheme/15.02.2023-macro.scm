@@ -57,33 +57,47 @@
   (when (= i 5)
    (break #t))) ; nel momento in cui i=5 sostituisco il loop con #t, quindi v sarà uguale a true e ritorno true
 
+
+
+
 ;Could have I done like this?
 
+;1) Works fine.
 (define saved-cont '())
 
-(define break
+(define (break v)
 (let ((c (car saved-cont)))
        (set! saved-cont (cdr saved-cont))
-       (c #f)))
+       (c v)))
      
   
 
 (define-syntax For
  (syntax-rules (from to break do)
- ((_ var from min to max break do body ...)
+ ((_ var from min to max do body ...)
   (let* ((min1 min)(max1 max)(inc (if (< min1 max1) + -))) 
-       (call/cc (lambda (break-sym)
+       (call/cc (lambda (cont)
+                   (set! saved-cont (cons cont saved-cont))
                    (let loop ((var min1))
                              body ...
                            (unless (= var max1)
                        (loop (inc var 1)))
-                     (break) )))
+                      )) )
     ))))
 
 
+(For i from 1 to 10
+ do
+ (displayln i)
+  (when (= i 5)
+   (break #t) ))
 
 
 
+
+
+
+;2)NO, the continuation is called externally by the body, we need to save the context and then call it.
 
 (define-syntax For
  (syntax-rules (from to break do)
