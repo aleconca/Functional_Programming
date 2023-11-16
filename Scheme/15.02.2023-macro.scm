@@ -41,15 +41,21 @@
        (let ((v (call/cc (lambda (break)
                            (set! exit-store (cons break exit-store))
                            (let loop ((var min1))
-                             body ...
+                             body ... ;nel body ci sarà (break #t)
                              (unless (= var max1)
                                (loop (inc var 1))))))
                 ))
-         (set! exit-store (cdr exit-store))
+         ;(set! exit-store (cdr exit-store)); l'ho usato
          v)
 
        ))))
 
+
+(For+ i from 1 to 10
+ do
+ (displayln i)
+  (when (= i 5)
+   (break #t))) ; nel momento in cui i=5 sostituisco il loop con #t, quindi v sarà uguale a true e ritorno true
 
 ;Could have I done like this?
 
