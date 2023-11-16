@@ -22,3 +22,42 @@
  ;(when (= i 5)
  ;(break #t)))
  ;will return #t after displaying the numbers from 1 to 5.
+
+
+
+ (define saved-cont '())
+
+(define-syntax break
+  (syntax-rules ()
+    ((_ e ...)
+     (let ((c (car saved-cont)))
+       (set! saved-cont (cdr saved-cont))
+       (c #f)))
+     )
+  )
+
+(define-syntax For
+ (syntax-rules (from to break do)
+ ((_ var from min to max break do body ...)
+  (let* ((min1 min)(max1 max)(inc (if (< min1 max1) + -))) 
+       (call/cc (lambda (cont)
+                   (let loop ((var min1))
+                     (if (var < max1)
+                         ((set! saved-cont (cons cont saved-cont))
+                           body ...)
+                          break )
+                       (loop (inc var 1)))))
+    ))))
+
+
+(define-syntax For
+ (syntax-rules (from to break do)
+ ((_ var from min to max do body ...)
+  (let* ((min1 min)(max1 max)(inc (if (< min1 max1) + -))) 
+       (call/cc (lambda (break)
+                   (let loop ((var min1))
+                     (if (var < max1)
+                          (body ...)
+                          (break #f)
+                       (loop (inc var 1)))))
+    ))))
