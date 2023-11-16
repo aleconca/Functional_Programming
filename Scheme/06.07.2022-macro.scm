@@ -26,3 +26,43 @@
 ;> (carlo 'change-name "Carlo")
 ;> (carlo 'prefix+name "Mr. ")
 ;"Mr. Carlo"
+
+
+(define (unknown-method ls)
+  (error "Unknown method" (car ls)))
+  
+
+(define-syntax define-dispatcher
+  (syntax-rules (methods: parent:)
+    
+    ((_ methods: (mt ...) parent: p)
+     (lambda (message . args)
+       (case message
+         ((mt) (apply mt args))
+         ...
+         (else (apply p (cons message args))))))
+    
+    ((_ methods: mts)
+     (define-dispatcher methods: mts parent: unknown-method)))
+  )
+
+
+
+(define (make-man)
+  (let ((p (make-entity))
+        (name "man"))
+    (define prefix+name
+      (lambda (prefix)
+        (string-append prefix name)))
+    (define change-name
+      (lambda (new-name)
+        (set! name new-name)))
+    (define-dispatcher methods: (prefix+name change-name) parent: p)))
+
+
+(define carlo (make-man))
+(carlo 'change-name "Carlo")
+(carlo 'prefix+name "Mr. ")
+
+
+
