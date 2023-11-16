@@ -8,7 +8,7 @@
 
 (define ret-store '())
 
-(define (ret v) ;is ret implicitly called?
+(define (ret v) 
   ((car ret-store) v));why not an apply? Apply is used when you want to apply a procedure to a list of arguments
 
 ;define contruct
@@ -21,9 +21,9 @@
        (let ((out ;CONTEXT up--------------------------------------
                   (call/cc (lambda (c)
                              (set! ret-store (cons c ret-store))
-                             body ...))
+                             body ...)) ;ret is called in the body
                    ));down------------------------------------------
-         (set! ret-store (cdr ret-store))
+         ;(set! ret-store (cdr ret-store))
          out)))))
 
 ;when we save the continuation, we are saving the context, i.e. the definition of the function, the variable out containig 
@@ -41,31 +41,8 @@
 ;In the case of the defun macro you provided, it's not necessary to use begin because we are defining a procedure using let to bind the result of the expressions, 
 ;and we are not looking for a value to return within a sequence of expressions.
 
-;Could have I done it like this?
 
-(define saved-cc '())
 
-(define (ret x)
-  (let ((c (car saved-cc)))
-    (set! saved-cc (cdr saved-cc))
-    (c x)))
-
-(define-syntax defun
-  (syntax-rules ()
-    ((_ f (var ...) e ...)
-     (define (f var ...)
-       (call/cc (lambda (cont)
-                  (set! saved-cc (cons cont saved-cc))))
-      e ...))))
-
-(defun my-function (a b)
-  (+ a b 1))
-
-(my-function 5 2)
-
-(ret 3)
-  
-;But like this we would get 2 return values while I want a return only for ret. Also, I am forced to call the function.
 
 
 
