@@ -25,39 +25,68 @@
 
 
 
- (define saved-cont '())
+(define exit-store '())
 
-(define-syntax break
-  (syntax-rules ()
-    ((_ e ...)
-     (let ((c (car saved-cont)))
+(define (break v)
+  ((car exit-store) v))
+
+(define-syntax For+
+  (syntax-rules (from to do)
+    ((_ var from min to max do body ...)
+     
+     (let* ((min1 min)
+            (max1 max)
+            (inc (if (< min1 max1) + -)))
+       
+       (let ((v (call/cc (lambda (break)
+                           (set! exit-store (cons break exit-store))
+                           (let loop ((var min1))
+                             body ...
+                             (unless (= var max1)
+                               (loop (inc var 1))))))
+                ))
+         (set! exit-store (cdr exit-store))
+         v)
+
+       ))))
+
+
+;Could have I done like this?
+
+(define saved-cont '())
+
+(define break
+(let ((c (car saved-cont)))
        (set! saved-cont (cdr saved-cont))
        (c #f)))
-     )
-  )
+     
+  
 
 (define-syntax For
  (syntax-rules (from to break do)
  ((_ var from min to max break do body ...)
   (let* ((min1 min)(max1 max)(inc (if (< min1 max1) + -))) 
-       (call/cc (lambda (cont)
+       (call/cc (lambda (break-sym)
                    (let loop ((var min1))
-                     (if (var < max1)
-                         ((set! saved-cont (cons cont saved-cont))
-                           body ...)
-                          break )
-                       (loop (inc var 1)))))
+                             body ...
+                           (unless (= var max1)
+                       (loop (inc var 1)))
+                     (break) )))
     ))))
+
+
+
+
 
 
 (define-syntax For
  (syntax-rules (from to break do)
- ((_ var from min to max do body ...)
+ ((_ var from min to max break do body ...)
   (let* ((min1 min)(max1 max)(inc (if (< min1 max1) + -))) 
-       (call/cc (lambda (break)
+       (call/cc (lambda (break-sym)
                    (let loop ((var min1))
-                     (if (var < max1)
-                          (body ...)
-                          (break #f)
-                       (loop (inc var 1)))))
+                             body ...
+                           (unless (= var max1)
+                       (loop (inc var 1)))
+                     (break #f) )))
     ))))
