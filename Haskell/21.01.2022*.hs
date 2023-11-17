@@ -31,3 +31,4 @@ instance Applicative Tvtl where
     pure x = Tl [x] []
     x <*> y = tvtlcmap (\f -> fmap f y) x 
     --perchè non distinguo tra Tv e Tl?
+    --perchè necessito di tvtlcmap? 
