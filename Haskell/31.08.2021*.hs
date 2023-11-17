@@ -8,6 +8,18 @@ data Slist a = Slist Int [a] --deriving (Show, Eq)
 instance Foldable Slist where
     foldr f i (Slist n xs) = foldr f i xs
 
+{-
+class Functor f where  
+    fmap :: (a -> b) -> f a -> f b 
+    
+Anyway, we see that fmap takes a function from one type to another and a functor applied with one type and returns a functor applied with another type.
+
+example:
+instance Functor Maybe where  
+    fmap f (Just x) = Just (f x)  
+    fmap f Nothing = Nothing  
+    
+-}    
 instance Functor Slist where
     fmap f (Slist n xs) = Slist n fmap xs
 
