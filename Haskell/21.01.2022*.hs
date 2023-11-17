@@ -24,11 +24,14 @@ instance Foldable Tvtl where --ok
 
 --That will be used in here
 tvtlconcat t = foldr (+++) (Tl [][]) t
-tvtlcmap f t = tvtlconcat $ fmap f t --perchè $ ?
-
+tvtlcmap f t = tvtlconcat $ fmap f t -- lo vedo come tvtlconcat ( fmap (\f -> fmap f y) x ); quindi la tvtlconcat prende in input i risultati intermedi della fmap esterna.
+                                     -- (vedilo come un'apply di una funzione a più argomenti)
+                                     -- fmap esterna applica una funzione della lista x/t  di funzioni passandola alla lambda interna, che applica a sua volta
+                                     -- una fmap alla lista di valori generici y, producendo i risultati intermedi. So come fare la fmap con Tvtl perchè
+                                     -- lo abbiamo definito in Functor! Quindi l'unica cosa che mi rimane da fare è concatenare i vari 'tipi' di risultati
+                                     -- intermedi nel modo giusto con (+++).
 
 instance Applicative Tvtl where
     pure x = Tl [x] []
     x <*> y = tvtlcmap (\f -> fmap f y) x 
     --perchè non distinguo tra Tv e Tl?
-    --perchè necessito di tvtlcmap? 
