@@ -59,14 +59,15 @@ instance Applicative Gtree where
 -----
 Tnil +++ x = x
 x +++ Tnil = x
-(Gtree x xs) +++ (Gtree y ys) = Gtree y ( (Gtree x []:xs) ++ ys) --?
+(Gtree x xs) +++ (Gtree y ys) = Gtree y ( (Gtree x []:xs) ++ ys) -- foldr?
 
-gtconcat = foldr (+++) Tnil 
+gtconcat v = foldr (+++) Tnil v
 gtconcatMap f t = gtconcat $ fmap f t
 
 instance Applicative Gtree where
     pure x = Gtree x []
     x <*> y = gtconcatMap (\f -> fmap f y) x 
+    --ancora, perchè astrae dal costruttore?
 
 
 
