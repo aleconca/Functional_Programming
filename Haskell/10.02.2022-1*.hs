@@ -41,8 +41,24 @@ class Foldable t where
 
 instance Foldable Gtree where
     foldr f z t = foldr f z $ gtree2list t --apply foldr to the final list given by gtree2list
-    
-    
+
+Tnil +++ x = x
+x +++ Tnil = x
+(Gtree x xs) +++ (Gtree y ys) = Gtree y ( (Gtree x []:xs) ++ ys) -- foldr?
+
+gtconcat v = foldr (+++) Tnil v
+gtconcatMap f t = gtconcat $ fmap f t
+
+instance Applicative Gtree where
+    pure x = Gtree x []
+    x <*> y = gtconcatMap (\f -> fmap f y) x 
+    --ancora, perchè astrae dal costruttore?    
+
+
+
+
+----
+
 Tnil (+++) Tnil  = Gtree [] []
 Tnil (+++) Gtree x xs = Gtree x xs
 Gtree x xs (+++) Tnil = Gtree x xs
@@ -57,17 +73,7 @@ instance Applicative Gtree where
 
 
 -----
-Tnil +++ x = x
-x +++ Tnil = x
-(Gtree x xs) +++ (Gtree y ys) = Gtree y ( (Gtree x []:xs) ++ ys) -- foldr?
 
-gtconcat v = foldr (+++) Tnil v
-gtconcatMap f t = gtconcat $ fmap f t
-
-instance Applicative Gtree where
-    pure x = Gtree x []
-    x <*> y = gtconcatMap (\f -> fmap f y) x 
-    --ancora, perchè astrae dal costruttore?
 
 
 
