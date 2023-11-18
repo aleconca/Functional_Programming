@@ -26,7 +26,11 @@ instance Functor Ctree where
 
 instance Foldable Ctree where
     foldr f z Cnil = z
-    foldr f z (Ctree x _ t1 t2) = f x $ foldr f (foldr f z t2) t1 --why apply?
+    foldr f z (Ctree x _ t1 t2) = f x $ foldr f (foldr f z t2) t1 --why apply? f is a binary function. 
+                                                                  --The use of f x $ foldr f (foldr f z t2) t1 ensures that the folding function f is applied 
+                                                                  --to the current node's value x and the result of folding over its subtrees. This mirrors the 
+                                                                  --typical recursive structure of tree traversal, applying a function at each node while recursively 
+                                                                  --processing its children.
 
 
 cvalue Cnil = 0
