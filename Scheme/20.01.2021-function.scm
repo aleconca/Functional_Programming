@@ -5,6 +5,8 @@
 ;The result of (multi-list->vector '(1 2 (3 4) (5 (6)) "hi" ((3) 4))))
 ;should be: '#(1 2 #(3 4) #(5 #(6)) "hi" #(#(3) 4))
 
+;The vector function in Scheme takes multiple arguments and returns a newly created vector containing those arguments.
+
 (define (multi-list->vector lst)
   (cond
     ((not (list? lst)) lst)  ; If lst is not a list, return lst as is
