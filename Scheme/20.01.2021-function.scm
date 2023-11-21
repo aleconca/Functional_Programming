@@ -7,8 +7,6 @@
 
 (define (multi-list->vector lst)
   (cond
-    ((not (list? lst)) lst)
-    ((null? (filter list? lst)) (apply vector lst))
-    (else (apply vector (map multi-list->vector lst)))))
-
-;------
+    ((not (list? lst)) lst)  ; If lst is not a list, return lst as is
+    ((null? (filter list? lst)) (apply vector lst))  ; If lst contains no sublists, create a vector from lst
+    (else (apply vector (map multi-list->vector lst)))))  ; Recursively apply multi-list->vector to each element of lst and create a vector
