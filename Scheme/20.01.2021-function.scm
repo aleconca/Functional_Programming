@@ -4,3 +4,11 @@
 ;E.g.
 ;The result of (multi-list->vector '(1 2 (3 4) (5 (6)) "hi" ((3) 4))))
 ;should be: '#(1 2 #(3 4) #(5 #(6)) "hi" #(#(3) 4))
+
+(define (multi-list->vector lst)
+  (cond
+    ((not (list? lst)) lst)
+    ((null? (filter list? lst)) (apply vector lst))
+    (else (apply vector (map multi-list->vector lst)))))
+
+;------
