@@ -12,16 +12,14 @@ data Gtree a = Tnil | Gtree a [Gtree a]
 --Gtree a [Gtree a] represents a node containing data of type a and a list of child trees (each of type Gtree a).
 
 gtree2list :: Gtree a -> [a]
-gtree2list Tnil = []
-gtree2list (Gtree x xs) = x : concatMap gtree2list xs
---gtree2list Gtree a [Gtree a] = [a] ++ gtree2list(Gtree a) ? No, come fai la ricorsione se 
---gtree2list prende un Gtree ? Oltretutto definizione sbagliata
+gtree2list Gnil = [] 
+gtree2list (Gtree x lst) =  x : concatMap gtree2list lst --concatMap per [3 [5 [Nil]]]; include una foldr (++) [] l
 
 
-instance Functor Gtree where
-    fmap _ Tnil = Tnil
-    fmap f (Gtree x xs) = Gtree (f x) (fmap f xs)
-    --fmap f (Gtree x xs) = Gtree (f x) (fmap (fmap f) xs) ??
+instance Functor Gtree where 
+    fmap f Gnil = Gnil
+    fmap f (Gtree x lst) = Gtree (f x) (map (fmap f) lst) --no concatMap: problemi tipi, ho Gtree non liste come sopra
+                                                          --map per lista, fmap per Gtree
 
 
 {-
