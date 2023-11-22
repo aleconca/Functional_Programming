@@ -5,6 +5,21 @@ an instance of Foldable, Functor, Applicative and Monad.
 
 data Slist a = Slist Int [a] --deriving (Show, Eq)
 
+{-
+class Foldable t where
+    foldMap :: Monoid m => t m -> m
+    foldr :: (a -> b -> b) -> b -> t a -> b
+    foldl :: (b -> a -> b) -> b -> t a -> b
+    
+-(a -> b -> b): This is the folding function that takes an element of type a, an accumulator of type b, and produces a new accumulator of type b. This function is applied to each element of the list during the folding process.
+
+-b: This is the initial (or "seed") value of the accumulator. It's the starting value for the folding process.
+
+-t a: This is the list of elements to be folded.
+
+-b: This is the final result of the folding process.    
+-}    
+
 instance Foldable Slist where
     foldr f i (Slist n xs) = foldr f i xs
 
