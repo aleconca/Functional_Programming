@@ -41,11 +41,16 @@ instance Foldable D2L where
     foldr f i (D2Cons2 xs ys) = (foldr f (foldr f i ys) xs)
 
 
+D2Nil +++ t = t
+t +++ D2Nil = t
+(D2Cons1 x xs) +++ t = D2Cons1 x (xs +++ t)
+(D2Cons2 xs ys) +++ t = D2Cons2 xs (ys +++ t)
+
+
 instance Applicative D2L where
-    pure
-    <*>
-
-
+    pure v = D2Cons1 x D2Nil
+    functorf<*>functorx = foldr (+++) D2Nil (fmap (\f -> fmap f functorx) functorf) --flatten?
+    
 
 
 
