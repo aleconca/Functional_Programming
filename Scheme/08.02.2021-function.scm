@@ -14,8 +14,8 @@
   (let ((v (cons i elem)))
     (set! result (cons v result ))
     ;(display v)
-    (display result)
-    (newline)
+    ;(display result)
+    ;(newline)
   )
   )
  
