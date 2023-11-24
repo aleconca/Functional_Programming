@@ -73,7 +73,6 @@ because == will always have a type of (==) :: (Eq a) => a -> a -> Bool, no matte
 --instance (Eq a) => Eq (Fpair s a) where
 -- x == y = (simplify x) == (simplify y)
 
-
 instance (Eq a) => Show (Eq s a) where --s does not influence the result so we can avoid adding it to the signature as (Eq s)
     (Fpair x y _) == (Fpair x y _) = x == x && y == y
     (Fpair x y _) == (Pair x y ) = x == x && y == y
@@ -82,22 +81,17 @@ instance (Eq a) => Show (Eq s a) where --s does not influence the result so we c
 
 
 --4) fmap :: (a -> b) -> f a -> f b
-
-instance Functor Fpair where
+instance Functor (Fpair s) where
     fmap f (Fpair x y z) = (Fpair (f x) (f y) z)
     fmap f (Pair x y) = (Pair (f x) (f y))
+
     
 {-
 class (Functor f) => Applicative f where  
     pure :: a -> f a  
     (<*>) :: f (a -> b) -> f a -> f b
 -}
-(Fpair x y _) <*> (Pair x y) = (Fpair (x)x y )
-(Pair x y) <*> (Pair x y)  =
-
-
-
-instance Applicative Fpair where
+instance Applicative (Fpair s) where
     pure v = (Pair v v)
     (Fpair x y z) <*> (Fpair f g _) = (Fpair (f x) (g y) z)
     (Fpair x y z) <*> (Pair f g) = (Fpair (f x) (g y) z)
@@ -105,6 +99,7 @@ instance Applicative Fpair where
     (Pair x y) <*> (Pair f g)  = (Pair (f x) (g y))
 
 
-instance Foldable Fpair where
+
+instance Foldable (Fpair s) where
     foldr f z (Fpair x y _) = (f x (f z y))
     foldr f z (Pair x y) = (f x (f z y))
