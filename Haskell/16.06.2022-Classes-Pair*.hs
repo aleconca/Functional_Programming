@@ -81,6 +81,12 @@ instance (Eq a) => Show (Eq s a) where --s does not influence the result so we c
 
 
 --4) fmap :: (a -> b) -> f a -> f b
+
+{-
+The Functor type class in Haskell expects a type constructor with a single type parameter. In your case, Fpair has two type parameters (s and a), and you need to partially 
+apply the type constructor to make it an instance of Functor for a specific type.
+-}
+
 instance Functor (Fpair s) where
     fmap f (Fpair x y z) = (Fpair (f x) (f y) z)
     fmap f (Pair x y) = (Pair (f x) (f y))
