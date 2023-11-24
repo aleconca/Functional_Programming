@@ -8,5 +8,6 @@ will become the added subtree (e.g. if the binary node is the left operand, the 
 the new ternary node will be the right operand).
 • If both the operands are ternary nodes, the right operand must be appened on the right of the left
 operand, by recursively calling concatenation.
+
 3) Make BTT an instance of Applicative.
 -}
