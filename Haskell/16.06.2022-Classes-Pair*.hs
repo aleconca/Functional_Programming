@@ -81,3 +81,30 @@ instance (Eq a) => Show (Eq s a) where --s does not influence the result so we c
     (Pair x y) == (Pair x y) = x == x && y == y
 
 
+--4) fmap :: (a -> b) -> f a -> f b
+
+instance Functor Fpair where
+    fmap f (Fpair x y z) = (Fpair (f x) (f y) z)
+    fmap f (Pair x y) = (Pair (f x) (f y))
+    
+{-
+class (Functor f) => Applicative f where  
+    pure :: a -> f a  
+    (<*>) :: f (a -> b) -> f a -> f b
+-}
+(Fpair x y _) <*> (Pair x y) = (Fpair (x)x y )
+(Pair x y) <*> (Pair x y)  =
+
+
+
+instance Applicative Fpair where
+    pure v = (Pair v v)
+    (Fpair x y z) <*> (Fpair f g _) = (Fpair (f x) (g y) z)
+    (Fpair x y z) <*> (Pair f g) = (Fpair (f x) (g y) z)
+    (Pair x y) <*> (Fpair f g h)  = (Fpair (f x) (g y) h)
+    (Pair x y) <*> (Pair f g)  = (Pair (f x) (g y))
+
+
+instance Foldable Fpair where
+    foldr f z (Fpair x y _) = (f x (f z y))
+    foldr f z (Pair x y) = (f x (f z y))
