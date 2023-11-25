@@ -25,3 +25,6 @@
   (vector-foldr vector-append #() (vector-map f v)))
 
 (define vector-pure vector)
+
+(define (vector-<*> fs xs)
+  (vector-concat-map (lambda (f) (vector-map f xs)) fs))
