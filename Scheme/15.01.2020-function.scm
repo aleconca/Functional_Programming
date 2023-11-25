@@ -21,3 +21,7 @@
         out
         (loop (+ cur 1) (f (vector-ref v cur) out)))))
 
+(define (vector-concat-map f v)
+  (vector-foldr vector-append #() (vector-map f v)))
+
+(define vector-pure vector)
