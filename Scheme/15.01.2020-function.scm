@@ -6,19 +6,18 @@
 ;2) Define vector-pure and vector-<*>.
 
 
-(define (vector-foldl vect)
-  (let ((result (make-vector 0 vect)))
-               (vector-map (lambda(x)(set! result (vector-append (make-vector 1 x) result)) ) vect)
-               result)
-  )
-(vector-foldl #(1 2 3))
-
-(define (vector-foldr vect)
-  (let ((result (make-vector 0 vect)))
-               (vector-map (lambda(x)(set! result (vector-append (make-vector 1 x) result)) ) (vector-foldl vect))
-               result)
-  )
-(vector-foldr #(1 2 3))
+(define (vector-foldr f i v)
+  (let loop ((cur (- (vector-length v) 1))
+             (out i))
+    (if (< cur 0)
+        out
+        (loop (- cur 1) (f (vector-ref v cur) out)))))
 
 
+(define (vector-foldl f i v)
+  (let loop ((cur 0)
+             (out i))
+    (if (>= cur (vector-length v))
+        out
+        (loop (+ cur 1) (f (vector-ref v cur) out)))))
 
