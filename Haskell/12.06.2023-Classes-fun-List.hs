@@ -38,7 +38,7 @@ instance Functor Part where
     
 
 --instance Foldable Part where
-    --foldr f z (Part l p r) = (foldr f (f (foldr f z l) p) r)
+    --foldr f z (Part l p r) = (foldr f (f (foldr f z l) p) r) doesn't ensure a valid partition
     
 instance Foldable Part where
  foldr f i p = foldr f i (part2list p)
