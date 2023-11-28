@@ -39,7 +39,8 @@ instance Functor Part where
 
 {-instance Foldable Part where
     --foldr f z (Part l p r) = (foldr f (f (foldr f z l) p) r) doesn't ensure a valid partition
-This approach is reasonable if you want to fold the elements in a way that starts from the left, incorporates the pivot, and then continues to the right. 
+    
+This approach is reasonable to fold the elements in a way that starts from the left, incorporates the pivot, and then continues to the right. 
 However, depending on your use case, you might want a different folding strategy.
 
 For example, you might want to fold the left list, then combine the result with the pivot, and then fold the right list. 
