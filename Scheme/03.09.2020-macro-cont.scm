@@ -9,15 +9,7 @@
 ;usual call/cc (with a simplified syntax, not requiring a lambda), but the
 ;current continuation must also be stored in v, before executing the body.
 
-(define-syntax call/cc-store
-  (syntax-rules(in)
-    ((_ (k in v) body ...)
-     (let ( (v (call/cc(lambda(k) k))) ) ;call the cc ->wrong, I want to save it in v
-       body ...
-       )
-     )
-    )
-  )
+
 
 (define-syntax call/cc-store
   (syntax-rules (in)
@@ -29,3 +21,16 @@
      )
     )
   )
+
+
+;WRONG:
+
+;(define-syntax call/cc-store
+  ;(syntax-rules(in)
+    ;((_ (k in v) body ...)
+     ;(let ( (v (call/cc(lambda(k) k))) ) ;call the cc ->wrong, I want to save it in v
+       ;body ...
+       ;)
+     ;)
+    ;)
+  ;)
