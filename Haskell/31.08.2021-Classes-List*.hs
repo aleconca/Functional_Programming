@@ -92,6 +92,11 @@ makeSlist v = Slist (length v) v
 instance Monad Slist where
     fail Slist _ = Slist 0 []
     (Slist n xs) >>= f = makeSlist (xs >>= (\x -> let Slist n xs = f x in xs) ) 
-    --it takes a monadic value (that is, a value with a context) and feeds it to a function that takes a normal value but returns a monadic value.
-    --makeSlist is used to create a new Slist from the concatenated list and its length.
+    --secondo >>= per liste : concatMap
+    --f x sarebbe (a -> SList b) quindi ritorna Slist 
+    --pattern matching Slist n' xs' = Slist 
+    -- \x della lambda è un elemento di xs 
+    --in xs' ritorna monade lista per >>= delle liste
+    
+    --concatMap (\x -> let Slist n' xs' = f x in xs') xs
 
