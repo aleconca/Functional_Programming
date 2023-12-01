@@ -5,6 +5,26 @@
 ;containing all the elements in the range [x,y], the third one with all the elements bigger than both x and y. It
 ;is not possible to use the named let construct in the implementation.
 
+;SOL:
+
+(define (3-part L v1 v2)
+  
+  (define (3-p L v1 v2 r1 r2 r3)
+    (if (null? L)
+        (list r1 r2 r3)
+        (let ((x (car L))
+              (xs (cdr L)))
+          (cond
+            ((and (< x v1)(< x v2)) (3-p xs v1 v2 (cons x r1) r2 r3))
+            ((and (>= x v1)(<= x v2)) (3-p xs v1 v2 r1 (cons x r2) r3))
+            ((and (> x v1)(> x v2)) (3-p xs v1 v2 r1 r2 (cons x r3)))))))
+  
+  (3-p L v1 v2 '() '() '())
+  )
+
+(3-part '(1 2 2 3 5 7 7 8 9) '2 '4)
+
+;OR:
 
 (define L1 '())
 (define L2 '())
