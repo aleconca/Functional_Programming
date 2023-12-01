@@ -9,16 +9,18 @@
 ;should display: (Branch (Branch (Leaf 2) 0 (Leaf 3)) -1 (Leaf 4))
 
 
-
+; the (Branch t1 x t2) function is a constructor for the Branch type. 
+;It doesn't explicitly "know" the type of t1, x, or t2. 
+;It's up to the user of this constructor to provide valid arguments that conforms to the structure expected for a Tree data type.
 (define (Branch t1 x t2)
   
    (define (print)
      (display "(Branch ")
-     (t1 'print)
+     (t1 'print) ;call print of Branch or Leaf
      (display " ")
      (display x)
      (display " ")
-     (t2 'print)
+     (t2 'print) ;call print of Branch or Leaf
      (display ")")
      )
 
