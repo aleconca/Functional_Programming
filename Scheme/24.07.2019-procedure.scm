@@ -12,7 +12,7 @@
   (define (3-p L v1 v2 r1 r2 r3)
     (if (null? L)
         (list r1 r2 r3)
-        (let ((x (car L))
+        (let ((x (car L)) ;named let means we cannot use the let to create a loop, like: let loop ((var val))
               (xs (cdr L)))
           (cond
             ((and (< x v1)(< x v2)) (3-p xs v1 v2 (cons x r1) r2 r3))
