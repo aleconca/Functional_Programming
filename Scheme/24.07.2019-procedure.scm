@@ -19,12 +19,15 @@
             ((and (>= x v1)(<= x v2)) (3-p xs v1 v2 r1 (cons x r2) r3))
             ((and (> x v1)(> x v2)) (3-p xs v1 v2 r1 r2 (cons x r3)))))))
   
-  (3-p L v1 v2 '() '() '())
+  (3-p L v1 v2 '() '() '()) ;last call
   )
 
 (3-part '(1 2 2 3 5 7 7 8 9) '2 '4)
 
-;OR:
+
+;this one below is not tail-recursive because the recursive call was part of a cond expression, 
+;and there are additional expressions to evaluate after the recursive call. In a tail-recursive function, 
+;the recursive call should be the last operation in the function as above.
 
 (define L1 '())
 (define L2 '())
