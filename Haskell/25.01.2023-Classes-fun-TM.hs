@@ -49,10 +49,7 @@ instance Functor Tape where
     fmap f (Tape l h r b) = Tape (fmap f l) (f h) (fmap f r) (f b)
 
 
-(Tape [] b [] b)+++(Tape l h r b) = Tape l++[] h []++r b
 
-concatTape t = foldr (+++) (Tape [] b [] b) t
-concatMapTape f t = concatTape(fmap f t)
 
 --pure :: a -> f a  
 --(<*>) :: f (a -> b) -> f a -> f b
@@ -62,3 +59,14 @@ instance Applicative Tape where
     (Tape fx fc fy fb) <*> (Tape x c y b) = Tape (zipApp fx x) (fc c) (zipApp fy y) (fb b)
                                             where zipApp x y = [f x | (f,x) <- zip x y] --list comprehension
                                             -- fx=(f1,f2,f3) e x=Char allora [(f1,x),(f3,x),(f3,x)] ed applico f x se ho un pair (f,x) e return list
+    
+    
+
+-- concatMap :: (a -> [b]) -> [a] -> [b]
+-- (concatMap (\f -> f x) fx)  
+    
+    
+    
+    
+    
+    
