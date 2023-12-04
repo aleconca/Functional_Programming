@@ -56,7 +56,7 @@ instance Functor Tape where
 instance Applicative Tape where
     pure x = Tape [] x [] x
  -- zipwise apply
-    (Tape fx fc fy fb) <*> (Tape x c y b) = Tape (zipApp fx x) (fc c) (zipApp fy y) (fb b)
+    (Tape fx f fy fb) <*> (Tape x h y b) = Tape (zipApp fx x) (f h) (zipApp fy y) (fb b)
                                             where zipApp x y = [f x | (f,x) <- zip x y] --list comprehension
                                             -- fx=(f1,f2,f3) e x=Char allora [(f1,x),(f3,x),(f3,x)] ed applico f x se ho un pair (f,x) e return list
     
