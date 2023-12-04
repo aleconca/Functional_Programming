@@ -63,7 +63,7 @@ instance Applicative Tape where
     
 
 -- concatMap :: (a -> [b]) -> [a] -> [b]
--- (concatMap (\f -> f x) fx)  
+-- (concatMap (\f -> fmap f xs) fx)  
     
     
     
