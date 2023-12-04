@@ -58,7 +58,7 @@ instance Applicative Tape where
  -- zipwise apply
     (Tape fl f fr fb) <*> (Tape l h r b) = Tape (zipApp fl l) (f h) (zipApp fr r) (fb b)
                                             where zipApp x y = [f x | (f,x) <- zip x y] --list comprehension
-                                            -- fx=(f1,f2,f3) e x=Char allora [(f1,x),(f3,x),(f3,x)] ed applico f x se ho un pair (f,x) e return list
+                                            -- fx=(f1,f2,f3) e x=(x1,x2,x3) allora [(f1,x1),(f3,x2),(f3,x3)] ed applico f x 
     
     
 
