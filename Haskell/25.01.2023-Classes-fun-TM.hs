@@ -63,10 +63,12 @@ instance Applicative Tape where
     
 
 -- concatMap :: (a -> [b]) -> [a] -> [b]
--- (concatMap (\f -> fmap f xs) fx)  
+-- (concatMap (\f -> fmap f l) fl)  
 -- applico ogni f alla lista intera e poi concateno i risultati
-    
-    
+
+-- map :: (a -> b) -> [a] -> [b]
+-- map (\f -> f x) (zip fl l)
+-- not possible because I have pairs in the input list 
     
     
     
