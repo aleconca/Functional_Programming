@@ -14,7 +14,7 @@
              (p3 l3)
              (out '()))
     
-    (if (or (null? p1)(null? p2)(null? p3))
+    (if (or (null? p1)(null? p2)(null? p3)) ;alla prima nulla mi fermo
         out
         ;else
         (let ((x1 (car p1))
