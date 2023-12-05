@@ -5,6 +5,31 @@
 
 ;E.g. (revlt '(1 2 3) '(4 5 6 7) '(8 9 10)) is the list '(#(3 6 10) #(2 5 9) #(1 4 8)).
 
+
+;easier:
+
+(define (revlt l1 l2 l3)
+  (let loop ((p1 l1)
+             (p2 l2)
+             (p3 l3)
+             (out '()))
+    
+    (if (or (null? p1)(null? p2)(null? p3))
+        out
+        ;else
+        (let ((x1 (car p1))
+              (x2 (car p2))
+              (x3 (car p3)))
+          (loop (cdr p1) (cdr p2) (cdr p3) (cons (vector x1 x2 x3) out))
+          )
+        )
+    )
+  )
+
+(revlt '(1 2 3) '(4 5 6 7) '(8 9 10))
+
+
+;OR
 (define (revlt L1 L2 L3)
   (let ((O 0)(concat (cons L1 (cons L2 (list L3)))) )
     
