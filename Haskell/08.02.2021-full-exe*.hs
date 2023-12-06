@@ -44,18 +44,18 @@ lookup key (Multimap (m@(Multinode nk nvals):ms))
                 
 remove :: Eq v => v -> Multimap k v -> Multimap k v                
 remove val (Multimap ms) = Multimap $ foldr mapfilter [] ms
-  where mapfilter (Multinode nk nvals) rest =
+  where mapfilter (Multinode nk nvals) rest =   --modify node by node and concatenaate intermediate results each time
           let filtered = filter (/= val) nvals
           in if null filtered
              then rest
-             else (Multinode nk filtered):rest
+             else (Multinode nk filtered):rest 
                                
                 
                 
 --2)
 instance Functor Multimap where
     fmap f (Multimap m) = Multimap (fmap (mapNode f) m) 
-                          where mapNode f (Multinode k v) = Multinode k (fmap f v)
+                          where mapNode f (Multinode k v) = Multinode k (fmap f v) --we need to apply fmap f to the list of values in the nodes
 
 
 
