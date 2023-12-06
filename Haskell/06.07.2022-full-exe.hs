@@ -68,6 +68,7 @@ instance (Show a) => Show (Deque a) where
 
 --4)
 instance Functor Deque where
+    --fmap :: (a -> b) -> f a -> f b 
     fmap f (Deque xs ys) = Deque (map f xs) (map f ys)
 
 instance Foldable Deque where
