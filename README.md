@@ -2,7 +2,6 @@
 
 https://github.com/andreafra/ppl
 
-This repository explores the fundamental principles of programming languages and their application in the domains of mathematics and science using three functional programming languages: Scheme (in particular the Racket dialect), Erlang, and Haskell.
 
 >Principles of Programming Languages
 
