@@ -11,3 +11,30 @@
 ;(return (+ x a))
 ;'unreachable),
 ;a call (f 3) should give 15.
+
+;1)
+(define (deepen L)
+  (foldl (lambda(x y)(list y x)) (list (car L)) (cdr L)) ;not cons in lambda: '(((((((x1) . x2) . x3) . x4) . x5) . x6) . x7)
+  )
+(deepen '(x1 x2 x3 x4 x5 x6 x7))
+;'(((((((x1) x2) x3) x4) x5) x6) x7)
+
+;2)
+(define-syntax define-with-return:
+  (syntax-rules()
+    ((_ return (f x ...) body ...)
+     (define (fun x ...) 
+       (call/cc (lambda(return) body ...))
+       )
+     )
+    )
+  )
+
+
+(define-with-return: return (f x)
+  (define a 12)
+  (return (+ x a))
+  'unreachable)
+
+(f 3)
+
