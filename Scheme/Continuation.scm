@@ -3,6 +3,48 @@
 ;Keyword: A continuation is the variable we pass to the lambda. When we call it, we save the context, i.e. anything that comes before and after.
 ;when we unvoke the continuation, we switch from the code to the saved context.
 
+
+;--------------------------
+;when to use continuations:
+
+;Non-Local Exits: If you need to exit a deeply nested computation and jump to a specific point in the program, call/cc allows you to capture the continuation 
+;at the point of the call and invoke it later.
+
+(define (foo)
+  (call/cc
+   (lambda (exit)
+     (if (= 42 (prompt "Enter a number: "))
+         (exit 'success)
+         'failure))))
+
+;Implementing Exceptions: You can use call/cc to implement exception handling mechanisms where an exceptional condition can be signaled and handled at a higher 
+;level in the call stack.
+
+(define (divide x y)
+  (call/cc
+   (lambda (exit)
+     (if (= y 0)
+         (exit 'division-by-zero)
+         (/ x y)))))
+
+;Custom Control Flow: call/cc enables the creation of custom control flow structures. For example, you can implement coroutines, generators, or other advanced control 
+;flow patterns.
+
+(define (generator)
+  (let ((state 0))
+    (lambda ()
+      (call/cc
+       (lambda (exit)
+         (set! state (+ state 1))
+         (exit state))))))
+
+(define gen (generator))
+(gen) ; Returns 1
+(gen) ; Returns 2
+
+
+;--------------------------------------------------------------------------------------------------------------------
+
 ;a contin­u­a­tion 
 (define c #f)
 (+ 1 (+ 2 (+ 3 (+ (let/cc here (set! c here) 4) 5)))) ; 15
