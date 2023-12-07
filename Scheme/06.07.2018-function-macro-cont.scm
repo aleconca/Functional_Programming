@@ -23,7 +23,7 @@
 (define-syntax define-with-return:
   (syntax-rules()
     ((_ return (f x ...) body ...)
-     (define (fun x ...) 
+     (define (f x ...) 
        (call/cc (lambda(return) body ...)) ;when you will call the lambda from the body you will get that the lambd awill be evaluated as : (lambda(return) return value)
        )                                   ;same as we did in the example (exit #f)
      )
