@@ -24,8 +24,8 @@ list2part :: (Ord a) => a -> [a] -> Part a
  list2part a l = l2ph a l [] [] where --helper function
   l2ph a [] l r = Part l a r
   l2ph a (x:xs) l r | x <= a = l2ph a xs (x:l) r 
-  --                | otherwise = l2ph a xs l (x:r)
-  l2ph a (x:xs) l r = l2ph a xs l (x:r)
+                    | otherwise = l2ph a xs l (x:r)
+ 
 
 
 instance Functor Part where
