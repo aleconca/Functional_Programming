@@ -36,7 +36,7 @@ instance Functor Part where
 --p2 = fmap (10 -) p1
 --p2 is not a correct partition. We could use list2part to fix the solution, but this requires that, if f :: (a -> b), b must be
 --an instance of Ord.
-    
+--ok funzioni monotone, ko funzioni del tipo  sinx . 
 
 {-instance Foldable Part where
     foldr f z (Part l p r) = (foldr f (f (foldr f z l) p) r) doesn't ensure a valid partition
