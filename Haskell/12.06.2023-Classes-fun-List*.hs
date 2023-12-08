@@ -29,7 +29,7 @@ list2part :: (Ord a) => a -> [a] -> Part a
 
 
 instance Functor Part where
-    fmap f (Part l p r) = (Part (fmap f l) (f p) (fmap f r))
+    fmap f (Part l p r) = Part (fmap f l) (f p) (fmap f r)
     
 --is not correct, because if we take e.g.
 --p1 = Part [1,2,3] 4 [5,6,6]
