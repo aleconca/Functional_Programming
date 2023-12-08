@@ -15,3 +15,27 @@ E.g. [1, 3, ...]
 
 Write the signatures of all the functions you define.-}
 
+data Tree a = Leaf a | Node (Tree a) (Tree a)
+
+
+--1)
+btrees :: a -> [Tree a]
+btrees x = helper(Leaf x)  
+            where helper tree =
+                    tree : (helper (Node tree tree) )
+
+--btrees x = Leaf x : [Node t t | t <- btrees x]        
+
+--2)
+fmap :: a -> b -> Tree a -> Tree b
+fmap f (Leaf x) = (Leaf f x)
+fmap  f (Node x y) = (Node (fmap f x) (fmap f y))
+
+btrees2 :: a -> [Tree a]
+btrees2 x = helper(Leaf x)  
+            where helper tree =
+                    tree : (helper (fmap (+1) (Node tree tree)) )
+
+
+--3)
+count x = 1 : [ v*2 + 1 | v <- count x ]
