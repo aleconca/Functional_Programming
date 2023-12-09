@@ -391,7 +391,7 @@ on which arrives first.
 
 
 
-We also have registred processes; register(Alias, Pid) Registers the process Pid with name Alias:
+We also have 'registred processes' ; register(Alias, Pid) Registers the process Pid with name Alias:
 
 start() ->
   Pid = spawn(?MODULE, server, [])
@@ -442,51 +442,32 @@ The supervisor sends "add" messages to workers, and keeps track of how many of t
 We are going to add code to simulate random errors in workers: the supervisor must keep track of such problems and re-start a new worker if one
 is prematurely terminated.
 
-main(Count) ->
+-module(main).
+-import(io, [fwrite/1]).
+-import(rand, [uniform/1]).
+-export([start/0,start/1, start_master/1, child/1, create_children/1,
+        master_loop/1]).
+
+start() ->
+  start(7).
+
+start(Count) ->
   register(the_master, self()), % I’m the master, now
   start_master(Count),
   unregister(the_master),
   io:format("That’s all.~n").
 
 start_master(Count) ->
-% The master needs to trap exits:
+  % The master needs to trap exits:
   process_flag(trap_exit, true),
   create_children(Count),
   master_loop(Count).
-
-% This creates the linked children
-create_children(0) -> ok;
-create_children(N) ->
-  Child = spawn_link(?MODULE, child, [0]), % spawn + link
-  io:format("Child ~p created~n", [Child]),
-  Child ! {add, 0},
-  create_children(N-1).
-
-master_loop(Count) ->
-  receive
-    {value, Child, V} ->
-      io:format("child ~p has value ~p ~n", [Child, V]),
-      Child ! {add, rand:uniform(10)},
-      master_loop(Count);
-    {’EXIT’, Child, normal} ->
-    io:format("child ~p has ended ~n", [Child]),
-    if
-      Count =:= 1 -> ok; % this was the last
-      true -> master_loop(Count-1)
-    end;
-  {’EXIT’, Child, _} -> % "unnormal" termination
-    NewChild = spawn_link(?MODULE, child, [0]),
-    io:format("child ~p has died, now replaced by ~p ~n",
-      [Child, NewChild]),
-    NewChild ! {add, rand:uniform(10)},
-    master_loop(Count)
-  end.
 
 
 child(Data) ->
 receive
   {add, V} ->
-    NewData = Data+V,
+    NewData = Data + V,
     BadChance = rand:uniform(10) < 2,
     if
       % random error in child:
@@ -496,6 +477,39 @@ receive
       % there is still work to do:
       true -> the_master ! {value, self(), NewData},
         child(NewData)
-   end
+    end
+end.
+
+
+% This creates the linked children
+create_children(0) -> ok;
+create_children(N) ->
+  Child = spawn_link(?MODULE, child, [0]), % spawn + link
+  io:format("Child ~p created~n", [Child]),
+  Child ! {add, 0},
+  create_children(N - 1).
+
+master_loop(Count) ->
+receive
+  {value, Child, V} ->
+    io:format("child ~p has value ~p ~n", [Child, V]),
+    Child ! {add, rand:uniform(10)},
+    master_loop(Count);
+  {'', Child, normal} ->
+    io:format("child ~p has ended ~n", [Child]),
+    if
+      Count =:= 1 -> ok; % this was the last
+      true ->
+        % spawn a new child and send the initial message
+        NewChild = spawn_link(?MODULE, child, [0]),
+        io:format("child ~p created~n", [NewChild]),
+        NewChild ! {add, rand:uniform(10)},
+        master_loop(Count - 1)
+    end;
+  {'', Child, _} -> % "unnormal" termination
+    NewChild = spawn_link(?MODULE, child, [0]),
+    io:format("child ~p has died, now replaced by ~p ~n", [Child, NewChild]),
+    NewChild ! {add, rand:uniform(10)},
+    master_loop(Count)
 end.
 
