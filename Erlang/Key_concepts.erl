@@ -434,6 +434,68 @@ request(Req) ->
 
 
 
+>Master-Slave Model:
+
+Each worker has a state (a natural number, 0 at start), can receive messages with a number to add to it from the supervisor, and sends back its current
+state. When its local value exceeds 30, a worker ends its activity.
+The supervisor sends "add" messages to workers, and keeps track of how many of them are still active; when the last one ends, it terminates.
+We are going to add code to simulate random errors in workers: the supervisor must keep track of such problems and re-start a new worker if one
+is prematurely terminated.
+
+main(Count) ->
+  register(the_master, self()), % I’m the master, now
+  start_master(Count),
+  unregister(the_master),
+  io:format("That’s all.~n").
+
+start_master(Count) ->
+% The master needs to trap exits:
+  process_flag(trap_exit, true),
+  create_children(Count),
+  master_loop(Count).
+
+% This creates the linked children
+create_children(0) -> ok;
+create_children(N) ->
+  Child = spawn_link(?MODULE, child, [0]), % spawn + link
+  io:format("Child ~p created~n", [Child]),
+  Child ! {add, 0},
+  create_children(N-1).
+
+master_loop(Count) ->
+  receive
+    {value, Child, V} ->
+      io:format("child ~p has value ~p ~n", [Child, V]),
+      Child ! {add, rand:uniform(10)},
+      master_loop(Count);
+    {’EXIT’, Child, normal} ->
+    io:format("child ~p has ended ~n", [Child]),
+    if
+      Count =:= 1 -> ok; % this was the last
+      true -> master_loop(Count-1)
+    end;
+  {’EXIT’, Child, _} -> % "unnormal" termination
+    NewChild = spawn_link(?MODULE, child, [0]),
+    io:format("child ~p has died, now replaced by ~p ~n",
+      [Child, NewChild]),
+    NewChild ! {add, rand:uniform(10)},
+    master_loop(Count)
+  end.
 
 
+child(Data) ->
+receive
+  {add, V} ->
+    NewData = Data+V,
+    BadChance = rand:uniform(10) < 2,
+    if
+      % random error in child:
+      BadChance -> error("I’m dying");
+      % child ends naturally:
+      NewData > 30 -> ok;
+      % there is still work to do:
+      true -> the_master ! {value, self(), NewData},
+        child(NewData)
+   end
+end.
 
