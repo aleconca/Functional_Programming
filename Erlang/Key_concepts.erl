@@ -251,6 +251,18 @@ size(X) =:= 2 - X is a tuple of size 2.
 
 All variables in a guard must be bound.
 
+Other useful constructs:
+
+case lists:member(a, X) of
+  true -> ... ;
+  false -> ...
+end,
+
+if
+  integer(X) -> ... ;
+  tuple(X) -> ... ;
+  true -> ...  % works as an "else"
+end,
 
 
 
@@ -262,11 +274,51 @@ All variables in a guard must be bound.
 
 
 
->Apply
+>Apply:
+apply(Mod, Func, Args)
 
->Lambdas
+1. Apply function Func in module Mod to the arguments in the list Args.
+2. Mod and Func must be atoms (or expressions which evaluate to atoms).
 
->hof
+apply(?MODULE, min_max, [[4,1,7,3,9,10]]).
+{1, 10}
+
+3. Any Erlang expression can be used in the arguments to apply.
+4. ?MODULE uses the preprocessor to get the current module’s name
+
+
+
+
+
+
+
+
+
+>Lambdas and hof:
+
+Syntax for lambdas is: 
+
+Square = fun (X) -> X*X end.
+
+We can use it like this: Square(3).
+Lambdas can be passed as usual to higher order functions:
+
+lists:map(Square, [1,2,3]). 
+%returns [1,4,9]
+
+To pass standard ("non-lambda") functions, we need to prefix their name with 'fun' and state their arity:
+
+lists:foldr(fun my_function/2, 0, [1,2,3]).
+
+
+
+
+
+
+
+
+
+
 
 >Concurrency
 
