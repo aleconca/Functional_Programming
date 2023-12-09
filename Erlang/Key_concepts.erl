@@ -96,7 +96,28 @@ A = 10
 {A,_, [B|_], {B}} = {abc, 23, [22, x], {22}}
   Succeeds - binds A = abc, B = 22
 
+The pattern matching behavior in Erlang is such that in the tuple pattern {A, A, B} = {abc, abc, foo}, 
+it succeeds because it matches the elements in the tuple with the specified variables, and it allows variables to be repeated in the pattern. 
+The matching process binds the variables to the corresponding values in the tuple.
 
+{A, A, B} = {abc, abc, foo}.
+-The tuple on the right is {abc, abc, foo}.
+-The pattern on the left {A, A, B} is attempting to match the elements of the tuple.
+-The first element A is matched with abc (success).
+-The second element A is matched with the second element abc (success).
+-The third element B is matched with the third element foo (success).
+
+So, the overall pattern matching succeeds, and variables are bound accordingly. 
+The repetition of the variable A in the pattern allows it to match the repeated values in the tuple.
+
+Now, let's consider the case {A, A, B} = {abc, def, 123}:
+
+-The tuple on the right is {abc, def, 123}.
+-The pattern on the left {A, A, B} is attempting to match the elements of the tuple.
+-The first element A is matched with abc (success).
+-The second element A is attempting to match with the second element def, but it fails because A is already bound to abc. Pattern matching fails.
+
+So, the overall pattern matching fails in the second case due to the attempt to bind the already bound variable A to a different value.
 
 
 
