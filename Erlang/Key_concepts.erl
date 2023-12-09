@@ -15,6 +15,7 @@ ACamelCaseVariableName
 
 
 
+
 >Atoms:
 Atoms are like symbols in Scheme. Any character code is allowed within an atom, singly quoted sequences of characters are atoms (not strings).
 Unquoted must be lowercase, to avoid clashes with variables.
@@ -70,6 +71,7 @@ There is also the concept of record (struct), but in Erlang it is just special s
 
 
 
+
 >Lists:
 Are like in Haskell, ex. [1, 2, 3], ++ concatenates. The main difference: [X | L] is cons (like (cons X L)).
 
@@ -87,6 +89,7 @@ Comprehensions are more or less like in Haskell:
 
 [{X,Y} || X <- [-1, 0, 1], Y <- [one, two, three], X >= 0].
 [{0,one},{0,two},{0,three},{1,one},{1,two},{1,three}]
+
 
 
 
@@ -146,6 +149,7 @@ So, the overall pattern matching fails in the second case due to the attempt to 
 
 
 
+
                               
 >Maps:
 There are maps, basically hash tables. Here are some examples:
@@ -165,6 +169,7 @@ There are maps, basically hash tables. Here are some examples:
 #{3 => three,one => 1,"Two" => 2}
 > V.
 2
+
 
 
 
@@ -274,6 +279,7 @@ end,
 
 
 
+
 >Apply:
 apply(Mod, Func, Args)
 
@@ -320,7 +326,9 @@ lists:foldr(fun my_function/2, 0, [1,2,3]).
 
 
 
->Concurrency
+>Concurrency:
+
+
 
 
 
