@@ -404,7 +404,8 @@ analyze(Seq) ->
   end.
 
 Any process can send a message to a registered process.
-
+In Erlang, registered processes are processes that have a globally unique name in the Erlang runtime system. 
+These names are used to easily identify and communicate with specific processes. The registration process is managed by the global module in the standard library.
 
 
 
@@ -445,11 +446,8 @@ is prematurely terminated.
 -module(main).
 -import(io, [fwrite/1]).
 -import(rand, [uniform/1]).
--export([start/0,start/1, start_master/1, child/1, create_children/1,
+-export([start/1, start_master/1, child/1, create_children/1,
         master_loop/1]).
-
-start() ->
-  start(7).
 
 start(Count) ->
   register(the_master, self()), % I’m the master, now
