@@ -26,11 +26,30 @@ start_with_a_lower_case_letter
 ’Anything inside quotes \n’
 
 
+NOTE:
+
+-Variables:
+Variables are used to hold values.
+They start with an uppercase letter or an underscore.
+Once assigned a value, the value cannot be changed.
+Variable = 42,
+
+-Atoms (Symbols):
+Atoms are constants, and they are often used to represent symbolic values.
+Atoms are written in lowercase or with a single-quoted string.
+They are used to represent names, labels, or unique identifiers.
+'AtomWithSpaces',
 
 
 
 
 
+
+
+
+
+
+  
 >Tuples:
 Tuples are used to store a fixed number of items.
 
@@ -41,6 +60,9 @@ Examples:
 {abc, {def, 123}, jkl}
 
 There is also the concept of record (struct), but in Erlang it is just special syntax for tuples.
+
+
+
 
 
 
@@ -153,9 +175,74 @@ There are maps, basically hash tables. Here are some examples:
 
 
 >Function Calls:
+module:func(Arg1, Arg2, ... Argn)
+func(Arg1, Arg2, .. Argn)
+
+1. Function and module names (func and module in the above) must be atoms.
+2. Functions are defined within Modules.
+3. Functions must be exported before they can be called from outside the module where they are defined.
+4. Use -import to avoid qualified names, but it is discouraged
+
 >BIFs:
+BIFs are in the erlang module. They do what you cannot do in Erlang, and are usually implemented in C:
+
+date()
+time()
+length([1,2,3,4,5])
+size({a,b,c})
+atom_to_list(an_atom) % "an_atom"
+list_to_tuple([1,2,3,4]) % {1,2,3,4}
+integer_to_list(2234) % "2234"
+tuple_to_list({}) 
+...
+
 >Function Syntax and Evaluation:
+A function is defined as a sequence of clauses.
+
+func(Pattern1, Pattern2, ...) -> ... ;
+func(Pattern1, Pattern2, ...) -> ... ;
+...
+func(Pattern1, Pattern2, ...) -> ... .
+
+Clauses are scanned sequentially until a match is found. When a match is found all variables occurring in the head become bound.
+Variables are local to each clause, and are allocated and deallocated
+automatically. The body is evaluated sequentially (use "," as separator).
+
+Examples:
+-module(mathStuff).
+-export([factorial/1, area/1]).
+
+factorial(0) -> 1;
+factorial(N) -> N * factorial(N-1).
+
+area({square, Side}) ->
+  Side * Side;
+area({circle, Radius}) ->
+  3.14 * Radius * Radius;
+area({triangle, A, B, C}) ->
+  S = (A + B + C)/2, 
+  math:sqrt(S*(S-A)*(S-B)*(S-C));
+area(Other) -> {invalid_object, Other}.
+
+
 >Guarded Functions:
+
+factorial(0) -> 1;
+factorial(N) when N > 0 ->
+  N * factorial(N - 1).
+
+The keyword when introduces a guard, like | in Haskell.
+
+
+
+
+
+
+
+
+
+
+
 
 >Apply
 
