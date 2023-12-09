@@ -328,6 +328,82 @@ lists:foldr(fun my_function/2, 0, [1,2,3]).
 
 >Concurrency:
 
+There are three main primitives:
+
+1. spawn : creates a new process executing the specified function, returning an identifier;
+
+we have a process with Pid1 (Process Identity or Pid) in it we perform:
+
+Pid2 = spawn(Mod, Func, Args)
+
+like apply but spawning a new process; after, Pid2 is the process identifier of the new process – this is known only to process Pid1.
+
+
+
+2. ! : sends a message to a process through its identifier; the content of the message is simply a variable. The operation is asynchronous;
+
+Process A sends a message to B (it uses self() to identify itself):
+
+PidB ! {self(), foo}
+
+{PidA, foo} is sent to process B
+
+B receives it with:
+
+receive
+  {From, Msg} -> Actions
+end
+
+self() – returns the Pid of the process executing it
+From and Msg become bound when the message is received.
+
+
+3. receive ... end : extract, going from the first, a message from a process’s mailbox queue matching with the provided set of patterns – this is blocking if
+no message is in the mailbox. The mailbox is persistent until the process quits.
+
+A performs PidC ! foo
+B performs PidC ! bar
+
+code in C:
+
+receive
+  foo -> true
+end,
+receive
+  bar -> true
+end
+
+foo is received, then bar, irrespective of the order in which they were sent.
+
+A performs PidC ! foo
+B performs PidC ! bar
+
+code in C:
+
+receive
+  Msg -> ... ;
+end
+
+The first message to arrive at the process C will be processed – the variable Msg in the process C will be bound to one of the atoms foo or bar depending
+on which arrives first.
+
+
+
+
+
+We also have registred processes; register(Alias, Pid) Registers the process Pid with name Alias:
+
+start() ->
+  Pid = spawn(?MODULE, server, [])
+  register(analyzer, Pid).
+
+analyze(Seq) ->
+  analyzer ! {self(), {analyze, Seq}},
+  receive
+    {analysis_result, R} -> R
+  end.
+
+Any process can send a message to a registered process.
 
 
 
