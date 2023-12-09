@@ -233,6 +233,24 @@ factorial(N) when N > 0 ->
 
 The keyword when introduces a guard, like | in Haskell.
 
+Examples of guards:
+
+number(X) - X is a number
+integer(X) - X is an integer
+float(X) - X is a float
+atom(X) - X is an atom
+tuple(X) - X is a tuple
+list(X) - X is a list
+X > Y + Z - X is > Y + Z
+X =:= Y - X is exactly equal to Y
+X =/= Y - X is not exactly equal to Y
+X == Y - X is equal to Y
+(with int coerced to floats, i.e. 1 == 1.0 succeeds but 1 =:= 1.0 fails)
+length(X) =:= 3 - X is a list of length 3
+size(X) =:= 2 - X is a tuple of size 2.
+
+All variables in a guard must be bound.
+
 
 
 
