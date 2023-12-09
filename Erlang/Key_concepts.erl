@@ -50,13 +50,22 @@ There is also the concept of record (struct), but in Erlang it is just special s
 
 >Lists:
 Are like in Haskell, ex. [1, 2, 3], ++ concatenates. The main difference: [X | L] is cons (like (cons X L)).
+
 Strings are lists, like in Haskell, but is getting common to use bitstrings and UTF.
+In Erlang, a bitstring is a binary data type that represents a sequence of bits. It is a flexible data type used for handling binary data efficiently. 
+Bitstrings are often used for operations that involve manipulating and processing binary data at a bit level. They can be created using the <<>> syntax.
+
+Example:
+Bits = <<1, 0, 1, 1, 0, 1, 0, 1>>.
+
+In this example, Bits is a bitstring representing the binary sequence 10110101.
+UTF (Unicode Transformation Format) is a character encoding standard that represents text in a form that can be used for processing and storage.
+
 Comprehensions are more or less like in Haskell:
 
 [{X,Y} || X <- [-1, 0, 1], Y <- [one, two, three], X >= 0].
 [{0,one},{0,two},{0,three},{1,one},{1,two},{1,three}]
 
-Indeed there is nice syntax and facilities for sequences of bits, also comprehensions.
 
 
 
