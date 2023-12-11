@@ -21,7 +21,6 @@
 
 
 
-%root process
 node_wait(Parent, Elem, Children) ->
     receive
       {register_child,  Child, Weight } -> node_wait(Parent, Elem, [{Child, Weight} | Children]); ;
@@ -29,8 +28,8 @@ node_wait(Parent, Elem, Children) ->
                                     Value == Elem ->
                                        Parent ! {distance, Value, self(), 0},
                                        node_wait(Parent, Elem, Children);
-                                    true ->
-                                       node_comp_dist(Parent, Elem, Children, Value)
+                                    true -> %else
+                                       node_comp_dist(Parent, Elem, Children, Value) %passo parent e figli
                                 end
     end.
 
@@ -40,7 +39,7 @@ node_comp_dist(Parent, Elem, Children, Value) ->
     [Child ! {get_distance, Value} || {Child, _} <- Children], %a tutti i figli della root process arriva un messaggio
     
     Dists = [receive %raccogli risposte
-               {distance, Value, Child, D} -> D + Weight; 
+               {distance, Value, Child, D} -> D + Weight; %come accumulto i pesi?
                {not_found, Value, Child} -> not_found
              end || {Child, Weight} <- Children], %list comprehension
     
