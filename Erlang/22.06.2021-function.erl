@@ -32,24 +32,26 @@ node_wait(Parent, Elem, Children) ->
                                     true ->
                                        node_comp_dist(Parent, Elem, Children, Value)
                                 end
- end.
+    end.
 
 
 
 node_comp_dist(Parent, Elem, Children, Value) ->  
-    [Child ! {get_distance, Value} || {Child, _} <- Children], %a tutti i figli della root arriva un messaggio
+    [Child ! {get_distance, Value} || {Child, _} <- Children], %a tutti i figli della root process arriva un messaggio
     
-    Dists = [receive
-               {distance, Value, Child, D} -> D + Weight;
+    Dists = [receive %raccogli risposte
+               {distance, Value, Child, D} -> D + Weight; 
                {not_found, Value, Child} -> not_found
              end || {Child, Weight} <- Children], %list comprehension
     
-    FoundDists = lists:filter(fun erlang:is_integer/1, Dists),
+    FoundDists = lists:filter(fun erlang:is_integer/1, Dists),%calcola min distance ignorando i not found
+    
     case FoundDists of
        [] ->
           Parent ! {not_found, Value, self()};
        _ ->
-          Parent ! {distance, Value, self(), lists:min(FoundDists)}
+          Parent ! {distance, Value, self(), lists:min(FoundDists)} %send result
     end,
+    
     node_wait(Parent, Elem, Children).
         
