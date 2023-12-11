@@ -15,3 +15,38 @@
 %its children, it may not accept any new children registrations. E.g., if we send {get_distance, a} to
 %the root process, it answers with the minimum distance between the root and the closest node
 %containing the atom a (which is 0 if a is in the root).
+
+
+node_wait(Parent, Elem, Children) ->
+    receive
+      {register_child,  Child, Weight } -> node_wait(Parent, Elem, [{Child, Weight} | Children]); ;
+      {get_distance, Value} -> if 
+                                    Value == Elem ->
+                                       Parent ! {distance, Value, self(), 0},
+                                       node_wait(Parent, Elem, Children);
+                                    true ->
+                                       node_comp_dist(Parent, Elem, Children, Value)
+                                end
+ end.
+
+
+
+
+
+node_comp_dist(Parent, Elem, Children, Value) ->  
+    [Child ! {get_distance, Value} || {Child, _} <- Children],
+    
+    Dists = [receive
+               {distance, Value, Child, D} -> D + Weight;
+               {not_found, Value, Child} -> not_found
+             end || {Child, Weight} <- Children], %list comprehension
+    
+    FoundDists = lists:filter(fun erlang:is_integer/1, Dists),
+    case FoundDists of
+       [] ->
+          Parent ! {not_found, Value, self()};
+       _ ->
+          Parent ! {distance, Value, self(), lists:min(FoundDists)}
+    end,
+    node_wait(Parent, Elem, Children).
+        
