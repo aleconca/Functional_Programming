@@ -17,7 +17,7 @@ broker(X,Y,f) when Length(X)==length(Y) ->
      {from, Y, data, D} ->
        X ! {from, self(), data, F(D)},
        broker(X, Y, F); 
-     stop ->
+     stop -> %qualsisi processo in qualsiasi momento può fermare il broker
        X ! stop,
        Y ! stop,
        ok
