@@ -58,9 +58,11 @@
   )
 
 
+
 (define (p L)
   (helper L '* '$ '() '() 0 '() 0 0)
   )
+
 
 (p '(* 1 2 3 * $ “hello” * 1 * 7 “my” * 1 2 * “world” $))
 ;(6 1 3 “hellomyworld”)
