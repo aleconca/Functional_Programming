@@ -65,5 +65,5 @@ The f inside State f is the monadic computation that represents the transformed 
 The state within this monadic computation is a list that accumulates the elements.
 
 >in snd $ f []: Extracts the state from the monadic computation f, i.e. the list, by initializing it with an empty list ([]) and using snd. 
-This gives us the final state after the tree traversal. N.B. snd :: (a, b) -> b extracts second element of a Pair
+This gives us the final state after the tree traversal. N.B. snd :: (a, b) -> b extracts second element of a Pair --ritorna final state
 -}
