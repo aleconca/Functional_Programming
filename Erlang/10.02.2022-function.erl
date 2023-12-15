@@ -16,20 +16,20 @@ split(List, Size, Pos, End) when Pos < End ->
 split(_, _, _, _) -> [].
 
 
-lex([X|Xs], []) when X =:= 32 -> % 32 is ' ', exactly equal to 32
+lex([X|Xs], []) when X =:= 32 -> % 32 is ' ', exactly equal to 32  i.e. head word is the space character
     lex(Xs, []);
 lex([X|Xs], Word) when X =:= 32 ->
     [list_to_atom(Word)] ++ lex(Xs, []);
-lex([X|Xs], Word) ->
+lex([X|Xs], Word) -> %come entro in questo Branch?
     lex(Xs, Word++[X]);
 lex([], []) ->
     [];
 lex([], Word) -> 
-    [list_to_atom(Word)].
+    [list_to_atom(Word)]. 
  
  
 run(Pid, Data) ->
- Pid ! {self(), lex(Data, [])}.
+ Pid ! {self(), lex(Data, [])}. %[] initial accumulator
 
 
 plex(List, Size) ->
