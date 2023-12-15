@@ -15,7 +15,7 @@ deeprev(X) -> X.
 
 %2
 deeprevp(L) ->
-    P = self(),
+    P = self(), %BIF that returns the Pid of the current process, 
     dp(P, L),
     receive
          {P, R} -> R %final result
@@ -23,16 +23,17 @@ deeprevp(L) ->
      
 dp(Pid, []) -> Pid ! {self(), []}; %base case
 dp(Pid, [X|Xs]) -> 
-    Self = self(),
-    P1 = spawn(fun() -> dp(Self, X) end),
-    P2 = spawn(fun() -> dp(Self, Xs) end),
+    Self1 = self(), %BIF that returns the Pid of the current process, 
+    P1 = spawn(fun() -> dp(Self1, X) end), %returns Pid of the spawned process
+    P2 = spawn(fun() -> dp(Self1, Xs) end), %why don't we use MODULE?, because we are defining two lambdas? I wrap the call inside an anonymous function so 
+                                            %it doesn't need arguments anymore. Calling spawn(?MODULE, dp, [Self, Xs]) would have done a similar job.
     receive
         {P1, V} ->
         receive
             {P2, Vs} ->
-            Pid ! {Self, Vs ++ [V]} %send final result
+            Pid ! {Self1, Vs ++ [V]} %send final result to P
         end
     end;
-dp(Pid, X) -> Pid ! {self(), X}. %send intermediate results 
+dp(Pid, X) -> Pid ! {self(), X}. %send intermediate results to Self1
 
     
