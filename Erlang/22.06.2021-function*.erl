@@ -41,15 +41,15 @@ node_comp_dist(Parent, Elem, Children, Value) ->
     Dists = [receive %raccogli risposte
                {distance, Value, Child, D} -> D + Weight; %come accumulto i pesi?
                {not_found, Value, Child} -> not_found
-             end || {Child, Weight} <- Children], %list comprehension
+             end || {Child, Weight} <- Children], %list comprehension-> asetto le risposte da ogni figlio dei figli, pausa fino a che ricevo le risposte
     
     FoundDists = lists:filter(fun erlang:is_integer/1, Dists),%calcola min distance ignorando i not found
     
-    case FoundDists of
+    case FoundDists of %
        [] ->
           Parent ! {not_found, Value, self()};
        _ ->
-          Parent ! {distance, Value, self(), lists:min(FoundDists)} %send result
+          Parent ! {distance, Value, self(), lists:min(FoundDists)} %send result; per leaves mando ''liste'' singole al parent
     end,
     
     node_wait(Parent, Elem, Children).
