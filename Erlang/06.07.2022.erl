@@ -21,4 +21,23 @@
 {compute_result, {identity, <slave_id>}, {value, <result_value>}}
 
 %5. multiple_query ends by returning the list of the computed results, that must be ordered according to FunL and DataL.
+
 %If you want, you may use lists:zip/2 and lists:zip3/3, that are the standard zip operations on 2 or 3 lists, respectively.
+
+
+
+                                                                       
+%(assume that there is a registered server called master_server)
+multiple_query(FunL, DataL) -> 
+    Self=self(),
+    master_server ! {slaves_request, {identity, Self}, {quantity, length(FunL)}},
+    receive
+        {slaves_id, Ids} -> [Id ! {compute_request, {identity, Self}, F, D} || {Id, F, D} <- lists:zip3(Ids, FunL, DataL)], %zip returns a list of tuples not map
+    end.
+    [
+    receive
+        {compute_result, Id, V} -> V,
+    end.
+    || Id <- Ids].
+
+
