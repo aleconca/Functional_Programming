@@ -28,4 +28,4 @@ instance Functor Bst where
 
 instance Foldable Bst where
     foldr f z Nil = Nil
-    foldr f z (Node x l r) = (foldr f z (f x (foldr f z r)) l)
+    foldr f z (Node x l r) = (foldr f (f x (foldr f z r)) l) --accumulatore a dx e aggiungo a sx
