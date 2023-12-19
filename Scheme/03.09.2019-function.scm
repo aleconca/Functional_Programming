@@ -5,7 +5,7 @@
 (define (a-function lst sep)
   (foldl (lambda (el next)
           (if (eq? el sep) (cons '() next)
-                           (cons (cons el (car next)) (cdr next)))
+                           (cons (cons el (car next)) (cdr next))) ;usa la lista vuota creata da nop precedente per inserire valori successivi
           ) (list '()) lst)
   )
 
