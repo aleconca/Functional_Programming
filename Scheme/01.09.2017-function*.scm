@@ -49,55 +49,28 @@
 
 ;------------------------------------------
 
-; Define a tail-recursive helper function
- (define (count-xy x y z w res L)(
-    ; Remember the previous balance in w
-    (set! w z)
-    
-    (cond
-      ((empty? L) ; End of the list
-       (if (= z 0) ; All matched parenthesis
-           res
-           #f))
-      ((< z 0) #f) ; Unmatched parenthesis, return false
-      ((eq? (car L) x) ; Check for open symbols (a and 1)
-       (set! z (+ z 1)))
-      ((eq? (car L) y) ; Check for close symbols (b and 2)
-       (set! z (- z 1)))
-       ; Default case
-    )
-    
-    ; If balance from this iteration has decreased, then we matched a pair
-    ((if (< z w) 
-        (count-xy x y z w (+ res 1) (cdr L))
-        (count-xy x y z w res (cdr L)))
-        
-    
+(define (helper L x y flagx flagy)
+  (if (null? L)
+      (if (and (= flagx 0)(= flagy 0))
+          (+ x y)
+          (display '#f)
+          )
+      (let ((curr (car L)))
+        (cond
+            ((eq? curr 'a) (helper (cdr L) x y (+ flagx 1) flagy))
+            ((eq? curr '1) (helper (cdr L) x y flagx (+ flagy 1)))
+            ((and (eq? curr 'b)(>= flagx 1)(< flagy flagx)) (helper (cdr L) (+ x 1) y (- flagx 1) flagy))
+            ((and (eq? curr '2)(>= flagy 1)) (helper (cdr L) x (+ y 1) flagx (- flagy 1)))
+            (else (helper (cdr L) x y flagx flagy))
+          )))
   )
- )
-)
 
+(define (check-this L)
+  (helper L 0 0 0 0)
+  )
 
-
- 
-(define (check-this L iter )
-(
-  
-  ;Initialize counts for 'a' and 'b' as well as '1' and '2'
-  (let ((ab (count-xy 'a 'b 0 0 0 L))
-        (onetwo (count-xy 1 2 0 0 0 L)))
-  ; Return the sum of both counts
-  (+ ab onetwo)
-   )
-
-)
-)
-
-(display (check-this '(a b a b) )) ; Output: 2 OK
-(display (check-this '(h e l l o) )) ; Output: 0 OK
-(display (check-this '(6 h a b a 1 h h i 2 b z 1))) ; Output: 3 KO
-(display (check-this '(6 h a b a 1 h h i b z 2) )) ; Output: #f (wrong structure) KO
-             
-    
-
-
+(check-this '(a b a b))
+(check-this '(h e l l o))
+(check-this '(6 h a b a 1 h h i 2 b z))
+(check-this '(6 h a b a 1 h h i b z 2))
+(check-this '(a a b b a 1 b 2))
