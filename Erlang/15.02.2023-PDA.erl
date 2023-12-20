@@ -1,6 +1,7 @@
 q0() ->
  receive
-   {S, [a|Xs], [z|T]} -> q1 ! {S, Xs, [a,z] ++ T}
+   {S, [a|Xs], [z|T]} -> q1 ! {S, Xs, [a,z] ++ T} %guarda archi uscenti; String,[Current Char|Rest of the String],[Current Stack symbol|Rest of the Stack=now Empty] 
+                                                  %send message: say the stack symbols to add to the initial empty stack
  end,
  q0().
 
@@ -14,7 +15,7 @@ q1() ->
 q2() ->
  receive
    {S, [b|Xs], [a|T]} -> q2 ! {S, Xs, T};
-   {S, Xs, [z|T]} -> q5 ! {S, Xs, T}
+   {S, Xs, [z|T]} -> q5 ! {S, Xs, T} %lambda = Null
  end,
  q2().
 
@@ -54,4 +55,4 @@ stop() ->
  unregister(q5).
 
 read_string(S) ->
- q0 ! {S, S, [z]}, ok.
+ q0 ! {S, S, [z]}, ok. %all'inizio nello stack hai solo Z
