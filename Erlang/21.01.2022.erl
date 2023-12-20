@@ -32,3 +32,28 @@ main() ->
 %should print the following:
 %Orange
 Pineapple
+
+
+
+
+hashtable_loop(HT,Buckets) ->
+    receive
+        {insert, Key, Value} ->
+            lists:nth(HashFun(Key) + 1, BucketPids) ! {insert, Key, Value},
+            hashtable_loop(HashFun, BucketPids);
+        {lookup, Key, RecipientPid} -> 
+            lists:nth(HashFun(Key) + 1, BucketPids) ! {lookup, Key, AnswerPid},
+            hashtable_loop(HashFun, BucketPids)
+    end.
+
+bucket(Content) ->
+ receive
+   {insert, Key, Value} -> NewContent = lists:keystore(Key, 1, Content, {Key, Value}), %1 inteso come primo valore con chiave indicata, in Content; Value=nuovo valore
+                           bucket(NewContent);
+ 
+   {lookup, Key, AnswerPid} -> case lists:keyfind(Key, 1, Content) of %same as for keystore; keys are unique
+                                    false -> AnswerPid ! not_found;
+                                    {_, Value} -> AnswerPid ! {found, Value}
+                               end,
+ bucket(Content),
+ end.
