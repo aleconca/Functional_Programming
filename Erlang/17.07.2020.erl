@@ -13,3 +13,12 @@
 
 %- stop is used to end the broadcaster, and to also stop every process
 %spawned by it.
+
+
+broadcaster(Pids) -> 
+    receive 
+        {spawn, L, V} -> R = [ spawn(?MODULE,X,[Y]) || X <- L, Y <- V],
+                         broadcaster(R);
+        {send, V} -> [ X ! Y || X <- Pids, Y <- V]
+        stop -> ok.
+    end.
