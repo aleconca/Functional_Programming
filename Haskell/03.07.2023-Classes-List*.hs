@@ -49,7 +49,7 @@ t +++ D2Nil = t
 
 instance Applicative D2L where
     pure v = D2Cons1 x D2Nil
-    functorf<*>functorx = foldr (+++) D2Nil (fmap (\f -> fmap f functorx) functorf) --flatten? 
+    functorf<*>functorx = foldr (+++) D2Nil (fmap (\f -> fmap f functorx) functorf) --flatten? No, avrei bisogno di qualcosa che ritrasforma le liste in D2L
     
 
 
