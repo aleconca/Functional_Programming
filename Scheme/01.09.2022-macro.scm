@@ -22,3 +22,13 @@
   )
 
 
+;N.B.
+;(append c cont) and (set! cont (cons (list c) cont)  do the same thing?
+
+;(append c cont): This expression appends the element c to the list cont. 
+;The append function typically creates a new list that is the result of appending the element c to the end of the existing list cont. 
+;The original list cont remains unchanged, and a new list is returned.
+
+;(set! cont (cons (list c) cont)): This expression modifies the variable cont in-place by prepending a new list containing the element c to the existing list cont. 
+;The cons function creates a new pair with the element c and the existing list cont, and then set! is used to update the variable cont with the new pair.
+
