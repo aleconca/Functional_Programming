@@ -26,3 +26,25 @@ campa: 1
 sotto: 1
 crepa: 1
 ok
+
+
+start_reduce_mgr(ReduceF) ->
+    spawn(?MODULE, reduce_mgr, [ReduceF, #{}]).
+
+reduce_mgr(ReduceF, Reducers) ->
+    receive
+        print_results -> lists:foreach(fun ({_, RPid}) -> RPid ! print_results end, maps:to_list(Reducers));
+        {reduce, Key, Value} -> case Reducers of
+                                #{Key := RPid} -> RPid ! {Key, Value},  %se alla chiave corrisponde il processo RPid
+                                                  reduce_mgr(ReduceF, Reducers);
+                                 _ -> NewReducer = spawn(?MODULE, reducer, [ReduceF, Key, Value]),
+                                                  reduce_mgr(ReduceF, Reducers#{Key => NewReducer}) %chiave-processo
+                                end
+    end.
+
+reducer(ReduceF, Key, Result) ->
+    receive
+        print_results -> io:format("~s: ~w~n", [Key, Result]);
+        {Key, Value} -> reducer(ReduceF, Key, ReduceF(Result, Value))
+    end.
+
