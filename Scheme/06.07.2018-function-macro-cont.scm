@@ -24,7 +24,8 @@
   (syntax-rules()
     ((_ return (f x ...) body ...)
      (define (f x ...) 
-       (call/cc (lambda(return) body ...)) ;when you will call the lambda from the body you will get that the lambd awill be evaluated as : (lambda(return) return value)
+       (call/cc (lambda(return) body ...)) ;when you will call the lambda from the body you will get that the lambda will be evaluated as: 
+                                           ;(lambda(return) (return value) )
        )                                   ;same as we did in the example (exit #f)
      )
     )
