@@ -29,6 +29,6 @@ next(Pid) -> %no need to receive the Pid through messages because of *
     Pid ! {next, Self},
     receive
         {next, V} -> V, next(Pid); % I just assume to ask for the next value when I call next, no need to keep sending messages automatically
-        stop_iteration -> ok % I shoud at least know to stop
+        stop_iteration -> io:format("stop iterations") % I shoud at least know to stop
     end.
     
