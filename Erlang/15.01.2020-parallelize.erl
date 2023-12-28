@@ -13,7 +13,7 @@ next(R) % is the atom stop_iteration
 
 
 range(Start, Stop, Inc) ->
-    spawn(?MODULE, ranger, [Start, End, Step]).
+    spawn(?MODULE, ranger, [Start, End, Step]). % * when called it returns a Pid that I give as argument to next when I call it
     
 ranger(Current, End, Step) ->
     Self=self(),
@@ -21,14 +21,14 @@ ranger(Current, End, Step) ->
         {next, P} -> if 
                         Start > End -> P ! stop_iteration;
                         true -> P ! {next, Current}, range(Current+Step, End, Step) ;
-                     end;
+                     end
     end.
     
-next(Pid) ->
+next(Pid) -> %no need to receive the Pid through messages because of *
     Self=self(),
     Pid ! {next, Self},
     receive
-        {next, V} -> V, Pid ! {next, Self}, next(Pid);
-        stop_iteration -> ok
+        {next, V} -> V, next(Pid); % I just assume to ask for the next value when I call next, no need to keep sending messages automatically
+        stop_iteration -> ok % I shoud at least know to stop
     end.
     
