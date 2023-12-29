@@ -17,7 +17,7 @@
   (syntax-rules(in until :)
     ((_ var in L until condition : body ...)
      (let loop ((xs L))   
-       (let ((var (car xs)))
+       (let ((var (car xs))) ;let* non va con loop -> quindi usiamo due let
          ;(display var)
          ;(display xs)
          (when (not condition)
