@@ -6,6 +6,29 @@
 %three → two → one → self,
 
 %this means that the next process of ‘three’ is ‘two’, and so on; self is the process that called create_pipe.
+
 %Each process is a simple repeater, showing on the screen its name and the received message, then sends it to
 %the next process.
 %Each process ends after receiving the ‘kill’ message, unregistering itself.
+
+repeater(Next, Name) ->
+    receive
+        kill -> unregister(Name),
+                Next ! kill;
+        V -> io:format("~p got ~p~n", [Name, V]),
+             Next ! V,
+             repeater(Next, Name)
+    end.
+
+create_pipe([], End) -> End;
+create_pipe([X|Xs], Next) ->
+    P = spawn(?MODULE, repeater, [Next, X]),
+    register(X, P),
+    create_pipe(Xs, X)
+
+
+%spawn just spawns a new process.
+
+%spawn_link spawns a new process and automatically creates a link between the calling process and the new process.
+
+
