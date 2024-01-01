@@ -11,3 +11,12 @@ ii) start :: [State], which contains the list of starting states.
 2) Define the necessary functions (providing also all their types) that, given an automaton A (through
 transition, end, and start) and a string s, can be used to check if A accepts s or not.
 -}
+
+--1)
+--data NFSA a = NFSA [a] [a] --matrix filled with transition values if an arch exists
+data Config = Config String [State] deriving (Show, Eq)
+
+--2)
+steps :: (Char -> State -> [State]) -> Config -> Bool
+steps trans (Config "" confs) = not . null $ filter end confs
+steps trans (Config (a:as) confs) = steps trans $ Config as (concatMap (trans a) confs)
