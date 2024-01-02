@@ -4,6 +4,7 @@
 %mergesort(L) ->
 % {L1, L2} = lists:split(length(L) div 2, L),
 % merge(mergesort(L1), mergesort(L2)).
+
 %merge(L1, L2) -> merge(L1, L2, []).
 %merge([], L2, A) -> A ++ L2;
 %merge(L1, [], A) -> A ++ L1;
