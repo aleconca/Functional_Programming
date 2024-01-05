@@ -41,7 +41,8 @@ class Foldable t where
 instance Foldable Gtree where
     foldr f z g = foldr f z (gtree2list g)
 
---+++ :: Gtree a -> Gtree a -> Gtree a  
+
+-- +++ :: Gtree a -> Gtree a -> Gtree a  
 Gnil+++(Gtree x xs) = Gtree x xs --Gnil+++x = x
 (Gtree x xs)+++Gnil = Gtree x xs --x+++Gnil = x
 --Gnil+++Gnil = Gnil
