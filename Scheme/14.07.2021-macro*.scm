@@ -26,6 +26,15 @@
          ;(set! ret-store (cdr ret-store))
          out)))))
 
+
+; Use the defun macro to define a function
+(defun my-function (x)
+  (+ x 1)
+  (ret 10)
+)
+
+(my-function 5) ;prints 10
+
 ;when we save the continuation, we are saving the context, i.e. the definition of the function, the variable out containig 
 ;the evaluation of the body and the set!.
 
