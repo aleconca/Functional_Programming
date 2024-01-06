@@ -1,4 +1,6 @@
-{-Define a data type that stores an m by n matrix as a list of lists by row.
+{-
+
+Define a data type that stores an m by n matrix as a list of lists by row.
 After defining an appropriate data constructor, do the following:
 
 1. Define a function `new' that takes as input two integers m and n
@@ -20,69 +22,53 @@ In your implementation you can use the following functions:
 splitAt :: Int -> [a] -> ([a], [a])
 unzip :: [(a, b)] -> ([a], [b])
 (!!) :: [a] -> Int -> a
+
 -}
 
 data Matrix a = Matrix [[a]]
 
 --1)
-new :: a -> a -> a -> Matrix a
-new x y fill = Matrix [row(x,y,fill)] where
-                row(x,y,fill) | y>0 = fill : row(fill,x,y-1),
-                row(x,0,fill) | x>0 = row(x-1,y,fill).
+new :: Int -> Int -> a -> Matrix a 
+new i j fill = [ [ fill | _ <- [1..j] ] | _ <- [1..i] ]
 
-new :: a -> a-> a -> Matrix a
-new m n fill = Matrix [[fill | _ <- [1..n]] | _ <- [1..m]]
 
 --2)
-replace :: Int -> Int -> a -> Matrix a -> Matrix a
-replace i j x (Matrix rows) = let (rowsHead, r:rowsTail) = splitAt i rows --trovi la riga
-                                  (rHead, x':rTail) = splitAt j r --trovi la colonna
-                              in Matrix $ rowsHead ++ ((rHead ++ (x:rTail)):rowsTail)
-                              
---3)
-lookup :: Int -> Int -> Matrix a -> a
-lookup i j (Matrix rows) = (rows !! i) !! j
+replace :: Matrix a -> Int -> Int -> a -> Matrix a 
+replace (Matrix xs) i j new = let m = length xs
+                                  n = length (xs!!i) in [[ if (c==j) && (r==i) then new else (lookup c r (Matrix xs) ) | c <- [1..n] ] | r <- [1..m]]
 
+
+--3)
+lookup :: Int -> Int -> Matrix a -> a 
+lookup i j (Matrix xs) = (xs!!i)!!j
 
 --4)
---instance Functor Matrix where
-    --fmap f (Matrix rows) = Matrix [ [f(v) | v <- row] | row <- rows]
-
-
 instance Functor Matrix where
-  fmap f (Matrix rows) = Matrix $ map (\r -> map f r) rows
-
-instance Foldable Matrix where
-  foldr f e (Matrix rows) = foldr (\r acc -> foldr f acc r) e rows
+    fmap f (Matrix xs) = Matrix (map (\x -> (map f x)) xs)
 
 
+instance Foldable Matrix where 
+    foldr f i (Matrix xs) = foldr (\x acc -> (foldr f acc x)) i xs
 
-hConcat :: Matrix a -> Matrix a -> Matrix a
-hConcat (Matrix []) m2 = m2
-hConcat m1 (Matrix []) = m1
-hConcat (Matrix (r1:r1s)) (Matrix (r2:r2s)) =
-  let (Matrix tail) = hConcat (Matrix r1s) (Matrix r2s)
-  in Matrix $ (r1 ++ r2) : tail
+--5)
 
-vConcat :: Matrix a -> Matrix a -> Matrix a
-vConcat (Matrix rows1) (Matrix rows2) = Matrix $ rows1 ++ rows2
+concatCol (Matrix xs) (Matrix ys) = Matrix (xs ++ ys)
 
-concatMapM :: (a -> Matrix b) -> Matrix a -> Matrix b
-concatMapM f (Matrix rows) =
-  let empty = Matrix []
-  in foldl
-     (\acc r -> vConcat acc $ foldl (\acc x -> hConcat acc (f x)) empty r)
-     empty
-     rows
-
-instance Applicative Matrix where
-  pure x = Matrix [[x]]
-  fs <*> xs = concatMapM (\f -> fmap f xs) fs
+concatRow (Matrix (x:xs)) (Matrix (y:ys)) = Matrix ((x++y) : (concatRow (Matrix xs) (Matrix ys)))
+concatRow (Matrix []) m = m 
+concatRow m (Matrix []) = m
 
 
+concatM (Matrix x) = (foldr (\x' acc -> concatCol (foldr concatRow (Matrix []) x') acc) (Matrix []) x)
 
+concatmapM :: (a -> Matrix b) -> Matrix a -> Matrix b 
+concatmapM f xs = concatM $ (fmap f xs)
 
+instance Applicative Matrix where 
+    pure x = new 1 1 x 
+    fs<*>m = concatmapM (\f -> fmap f m) fs
 
+    
 
 
 
