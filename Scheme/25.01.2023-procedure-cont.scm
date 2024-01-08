@@ -45,41 +45,38 @@
 
 ;ANOTHER SOLUTION:--------------------------------------------------------------------------------------------------------
 
+;SOL:
+(define queue '())
 
-;global queue
-(define cont '())
-
-;extract and call the last procedure
 (define (use-cc)
-  (let ((c (car cont)))
-    (set! cont (cdr cont))    
-  (c))
-  )
-
-;input: cond, L, body
-(define (for-each/cc cond L body)
-  (for-each (lambda(x)
-              
-              (call/cc (lambda(c) ;chiama qui la continuation
-                      (when (cond x)
-                           (if (empty? cont)
-                               (set! cont (list c))
-                               (set! cont (append cont (list c))) )
-                                     ) (body x) ) ;passare paramentro a body
-                           )) 
-
-                       L)
+  (when (not (null? queue))
+      (let ((v (car queue))) 
+        (set! queue (cdr queue))
+        (v))
+  )    
  )
 
-(for-each/cc odd?  '(1 2 3 4)  (lambda (x) (displayln x)))
+(define (for-each/cc cond L body)
+  ;CONTEXT--------------------
+  (when (not (null? L))
+    (let loop ((l L))
+      (when (not (null? l))
+        ;--------------------------- 
+        (call/cc (lambda(c)
+                   (when (cond (car l))
+                     (set! queue (append queue (list c)));FIFO queue. NOT A STACK.
+                     )
+                   (body (car l)) );for-each/cc will call this on every value BUT 
+                 ;when we will call each saved cont, there the context is switched, the value on which we set! the cont in the gloabal queue is discarded.
+                 ;We will resume computations starting from the recursive call, so the current value is discarded and not displayed.
+                 )
+        (loop (cdr l))))
+    )
+  )
 
-;Then, if we run: (use-scc), we will get on screen:
-;2
-;3
-;4
+
+(for-each/cc odd? '(1 2 3 4) (lambda (x) (displayln x)))
 (newline)
 (use-cc) 
 (newline)
 (use-cc) 
-
-
