@@ -5,7 +5,7 @@ https://github.com/andreafra/ppl
 
 >Principles of Programming Languages
 
-Programming languages serve as the foundation for software development. Understanding their core principles is crucial for creating efficient, maintainable, and reliable programs. Here are some key principles:
+Programming languages serve as the foundation for software development. Understanding their core principles is crucial for creating efficient, maintainable and reliable programs. Here are some key principles:
 
 1.Syntax and Semantics: Programming languages have specific rules (syntax) and meanings (semantics) that govern how code is written and executed.
 
@@ -15,7 +15,7 @@ Programming languages serve as the foundation for software development. Understa
 
 4.Functions and Procedures: Functions encapsulate code blocks to perform specific tasks, fostering code reusability and modularity.
 
-5.Control Structures: Control structures dictate the flow of program execution, including conditionals, loops, and branching.
+5.Control Structures: Control structures dictate the flow of program execution including conditionals, loops and branching.
 
 6.Encapsulation: Encapsulation bundles data and methods into objects, enhancing organization and data security.
 
@@ -35,11 +35,11 @@ Understanding programming languages is essential for several reasons:
 
 The principles of programming languages are particularly valuable in mathematical and scientific computing. Here's how they are applied:
 
--Scheme: Scheme's simplicity and powerful functional programming capabilities make it suitable for symbolic mathematics, numerical analysis, and artificial intelligence research.
+-Scheme: Scheme's simplicity and powerful functional programming capabilities make it suitable for symbolic mathematics, numerical analysi and artificial intelligence research.
 
 -Erlang: Erlang's concurrency and fault-tolerance features make it ideal for distributed and real-time systems, crucial in scientific simulations and telecommunications.
 
--Haskell: Haskell's strong type system and functional programming paradigm make it suitable for mathematical modeling, algorithm development, and data analysis.
+-Haskell: Haskell's strong type system and functional programming paradigm make it suitable for mathematical modeling, algorithm development and data analysis.
 
 
 >Content of the subfolders:
